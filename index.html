@@ -2,695 +2,119 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Hindernisstrecke – Farben &amp; Formen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thilo &amp; Opi – Spiele</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#111;--paper:#fffdf4;--yel:#FFD21F;--red:#E8312F;--blue:#2F7DE1;--green:#2DB34A}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
 body{font-family:'Comic Neue',system-ui,sans-serif;font-weight:700;color:var(--ink);
-  background:#ffe066;background-image:radial-gradient(rgba(0,0,0,.14) 1.3px,transparent 1.7px);background-size:12px 12px;
-  overflow-x:hidden;-webkit-user-select:none;user-select:none}
-#app{max-width:560px;margin:0 auto;min-height:100vh;padding:10px 12px;display:flex;flex-direction:column;gap:12px}
-.panel{background:var(--paper);border:4px solid var(--ink);border-radius:6px;box-shadow:6px 6px 0 var(--ink);padding:14px;position:relative}
-.bang,h1,h2{font-family:'Bangers',cursive;font-weight:400;letter-spacing:1.5px;margin:0}
-.title{font-size:46px;line-height:1;color:var(--red);-webkit-text-stroke:1.5px var(--ink);text-shadow:3px 3px 0 var(--ink);text-align:center;transform:rotate(-2deg);margin-top:6px}
-.subtitle{text-align:center;font-family:'Bangers';font-size:22px;letter-spacing:1px;background:var(--blue);color:#fff;border:3px solid var(--ink);display:inline-block;padding:2px 12px;transform:rotate(1.5deg);box-shadow:3px 3px 0 var(--ink)}
-.center{text-align:center}
-.btn{font-family:'Bangers',cursive;font-size:26px;letter-spacing:1px;border:4px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);background:#fff;padding:10px 18px;cursor:pointer;color:var(--ink);touch-action:manipulation}
-.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.btn.go{background:var(--red);color:#fff;text-shadow:2px 2px 0 var(--ink);font-size:44px;width:100%;padding:14px}
-.btn.small{font-size:20px;padding:6px 12px;border-width:3px;box-shadow:3px 3px 0 var(--ink)}
-.btn.blue{background:var(--blue);color:#fff;text-shadow:2px 2px 0 var(--ink)}
-.btn.green{background:var(--green);color:#fff;text-shadow:2px 2px 0 var(--ink)}
-.row{display:flex;gap:12px;align-items:center}
-.grow{flex:1}
-/* role cards */
-.roles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.rolecard{border:4px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);padding:14px 8px;text-align:center;cursor:pointer;background:#fff}
-.rolecard:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
-.rolecard svg{width:100%;height:110px}
-.rolecard .bang{font-size:30px}
-.rolecard.kid{background:#ffd9d6}.rolecard.papa{background:#d6e6ff}
-/* animals */
-.animals{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.animal{font-size:34px;aspect-ratio:1;border:3px solid var(--ink);border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
-.animal.on{background:var(--yel);transform:scale(1.08) rotate(-4deg)}
-.status{font-size:17px;margin-top:8px}
-.pill{display:inline-block;border:3px solid var(--ink);border-radius:20px;padding:2px 10px;background:#fff;margin:3px 4px 0 0}
-.pill.ok{background:#c9f5d2}
-/* settings */
-.set{margin:10px 0}
-.set label.lbl{display:block;font-size:16px;margin-bottom:4px}
-.seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{font-family:'Comic Neue';font-weight:700;font-size:16px;border:3px solid var(--ink);border-radius:9px;background:#fff;padding:6px 10px;cursor:pointer}
-.seg button.on{background:var(--yel);box-shadow:inset 0 -4px 0 rgba(0,0,0,.18)}
-.seg button.sw{width:40px;height:40px;padding:0}
-.seg button.sw.on{outline:4px solid var(--ink);outline-offset:2px}
-.seg button.shp{width:46px;height:46px;padding:4px}
-.seg button.shp svg{width:100%;height:100%}
-details summary{font-family:'Bangers';font-size:24px;letter-spacing:1px;cursor:pointer;list-style:none}
-details summary::-webkit-details-marker{display:none}
-/* track */
-.track{padding:4px 8px}
-.track svg{width:100%;height:auto;display:block}
-.fig{transition:transform .8s cubic-bezier(.3,1.5,.5,1)}
-/* stage */
-.bubble{position:relative;background:#fff;border:4px solid var(--ink);border-radius:22px;padding:4px 14px;text-align:center;font-family:'Bangers';font-size:34px;letter-spacing:1px;margin:0 6px 14px;min-height:56px;display:flex;align-items:center;justify-content:center;gap:10px}
-.bubble:after{content:"";position:absolute;left:38px;bottom:-20px;border:10px solid transparent;border-top:14px solid var(--ink)}
-.bubble:before{content:"";position:absolute;left:42px;bottom:-12px;border:6px solid transparent;border-top:10px solid #fff;z-index:1}
-.bubble .speak{font-size:30px;border:3px solid var(--ink);border-radius:50%;width:54px;height:54px;background:var(--yel);cursor:pointer;flex:none}
-.bubble.big .speak{width:96px;height:96px;font-size:52px}
-.scene{position:relative;height:clamp(150px,23vh,230px);border:4px solid var(--ink);overflow:hidden;
-  background:#8fd3ff;}
-.wall{position:absolute;inset:0;background-color:#c7663f;
-  background-image:linear-gradient(#5a2a14 3px,transparent 3px),linear-gradient(90deg,#5a2a14 3px,transparent 3px);
-  background-size:52px 26px;background-position:0 0,0 0}
-.wall:after{content:"";position:absolute;inset:0;background-image:linear-gradient(90deg,#5a2a14 3px,transparent 3px);background-size:52px 52px;background-position:26px 26px;
-  -webkit-mask:linear-gradient(transparent 26px,#000 26px) 0 0/100% 52px;mask:linear-gradient(transparent 26px,#000 26px) 0 0/100% 52px}
-.scene.t1 .wall{background-color:#3f9d4a;background-image:radial-gradient(circle at 30% 30%,#5cc35c 0 9px,transparent 10px),radial-gradient(circle at 70% 60%,#2f7d38 0 11px,transparent 12px);background-size:44px 40px,52px 46px}
-.scene.t1 .wall:after{display:none}
-.scene.t2 .wall{background-color:#cfeeff;background-image:linear-gradient(#7fb8dc 3px,transparent 3px),linear-gradient(90deg,#7fb8dc 3px,transparent 3px);background-size:60px 30px}
-.scene.t2 .wall:after{background-image:linear-gradient(90deg,#7fb8dc 3px,transparent 3px);background-size:60px 60px;background-position:30px 30px}
-.scene.t2 .ground{background:#fff}
-.scene.t3 .wall{background-color:#2b1f5c;background-image:radial-gradient(#fff 1.5px,transparent 2px),radial-gradient(#ffd21f 2px,transparent 2.5px);background-size:37px 41px,71px 59px;background-position:0 0,20px 13px}
-.scene.t3 .wall:after{display:none}
-.scene.t3 .ground{background:#9a8fb8}
-.ground{position:absolute;left:0;right:0;bottom:0;height:16%;background:#5cc35c;border-top:4px solid var(--ink)}
-.doorway{position:absolute;left:50%;bottom:16%;transform:translateX(-50%);width:min(60%,250px);height:76%;background:#ffe9a8;border:4px solid var(--ink);border-bottom:0;border-radius:50% 50% 0 0/28% 28% 0 0;overflow:hidden}
-.doorway .sky{position:absolute;inset:0;background:radial-gradient(circle at 50% 80%,#fff7c2,#ffd21f 70%)}
-.door{position:absolute;inset:0;background:repeating-linear-gradient(90deg,#a0612d 0 22%,#7a4219 22% 24%);transition:transform .55s cubic-bezier(.6,-0.4,.4,1.2);display:flex;align-items:center;justify-content:center}
-.door.open{transform:translateY(-105%)}
-.sign{width:min(64%,130px);aspect-ratio:1;background:#fff;border:4px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 var(--ink)}
-.sign svg{width:78%;height:78%}
-.sign.q{font-family:'Bangers';font-size:64px}
-.herobig{position:absolute;left:4%;bottom:9%;width:22%;max-width:90px;transition:transform .9s ease-in,opacity .9s}
-.herobig.run{transform:translateX(220%) scale(.6);opacity:0}
-.burst{position:absolute;left:50%;top:44%;width:220px;height:170px;margin:-85px 0 0 -110px;pointer-events:none;transform:scale(0) rotate(-20deg);opacity:0}
-.burst.show{animation:pop 1s ease-out forwards}
-.burst svg{position:absolute;inset:0;width:100%;height:100%}
-.burst span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bangers';font-size:46px;color:var(--red);-webkit-text-stroke:2px var(--ink);text-shadow:3px 3px 0 var(--ink)}
-@keyframes pop{0%{transform:scale(0) rotate(-20deg);opacity:1}25%{transform:scale(1.15) rotate(-6deg);opacity:1}70%{transform:scale(1) rotate(-6deg);opacity:1}100%{transform:scale(1.3) rotate(-6deg);opacity:0}}
-.banana{position:absolute;inset:0;background:rgba(255,255,255,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Bangers';font-size:30px;letter-spacing:1px;z-index:3}
-.banana .em{font-size:70px;animation:wob .5s infinite alternate}
-@keyframes wob{from{transform:rotate(-15deg)}to{transform:rotate(15deg)}}
-/* options */
-.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:4px}
-.opts.c3{grid-template-columns:repeat(3,1fr)}
-.opts.c2{grid-template-columns:repeat(2,1fr)}
-.opt{height:clamp(104px,16vh,170px);border:4px solid var(--ink);border-radius:18px;background:#fff;box-shadow:5px 5px 0 var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:10%;transition:opacity .4s}
-.opts.kid .opt{border-width:5px}
-.opts.kid.c3 .opt{height:clamp(130px,22vh,230px)}
-.opt svg{width:100%;height:100%}
-.opt:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
-.opt.gone{opacity:.12;pointer-events:none;box-shadow:none}
-.opt.shake{animation:shake .45s}
-.opt.hint{animation:pulse 1s infinite}
-.opt.right{background:#c9f5d2}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px) rotate(-4deg)}40%{transform:translateX(10px) rotate(4deg)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07);box-shadow:0 0 0 8px rgba(255,210,31,.9),5px 5px 0 var(--ink)}}
-.say{display:flex;flex-direction:column;gap:12px;align-items:stretch}
-.say .hint{font-size:20px;text-align:center}
-/* overlays */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
-.overlay .panel{max-width:460px;width:100%;transform:rotate(-1deg)}
-.count{font-family:'Bangers';font-size:150px;color:var(--yel);-webkit-text-stroke:4px var(--ink);text-shadow:8px 8px 0 var(--ink);animation:cnt 1s ease-out}
-@keyframes cnt{from{transform:scale(2.2) rotate(-10deg);opacity:0}to{transform:scale(1);opacity:1}}
-.trophies{display:flex;justify-content:space-around;gap:10px;text-align:center}
-.trophies svg{width:120px;height:140px}
-.trophies .bang{font-size:24px}
-.muted{opacity:.7;font-size:15px}
-.topbar{display:flex;justify-content:space-between;align-items:center}
-.topbar .bang{font-size:24px}
-.noconn{background:#ffe1e1}
+  background:#ffe066;background-image:radial-gradient(rgba(0,0,0,.14) 1.3px,transparent 1.7px);background-size:12px 12px}
+main{max-width:620px;margin:0 auto;padding:18px 14px 40px;display:flex;flex-direction:column;gap:22px}
+.bang{font-family:'Bangers',cursive;font-weight:400;letter-spacing:1.5px}
+.title{font-family:'Bangers',cursive;font-size:56px;line-height:1;margin:6px 0 0;color:var(--red);-webkit-text-stroke:1.5px var(--ink);text-shadow:4px 4px 0 var(--ink);text-align:center;transform:rotate(-2deg)}
+.subtitle{display:inline-block;font-family:'Bangers';font-size:24px;letter-spacing:1px;background:var(--blue);color:#fff;border:3px solid var(--ink);padding:2px 14px;transform:rotate(1.5deg);box-shadow:3px 3px 0 var(--ink)}
+.heroes{display:flex;justify-content:center;gap:10px;margin-top:6px}
+.heroes svg{width:96px;height:112px}
+.card{display:block;text-decoration:none;color:var(--ink);background:var(--paper);border:4px solid var(--ink);border-radius:8px;box-shadow:7px 7px 0 var(--ink);padding:16px;transition:transform .15s}
+.card:nth-of-type(1){transform:rotate(-1deg)}.card:nth-of-type(2){transform:rotate(1deg)}
+.card:hover,.card:focus-visible{transform:rotate(0) scale(1.02)}
+.card:active{transform:translate(4px,4px);box-shadow:3px 3px 0 var(--ink)}
+.card h2{font-family:'Bangers';font-weight:400;font-size:40px;letter-spacing:1.5px;margin:0 0 4px}
+.card p{margin:6px 0 12px;font-size:18px;line-height:1.35}
+.pic{border:3px solid var(--ink);border-radius:6px;overflow:hidden;background:#8fd3ff;margin-bottom:10px}
+.pic svg{display:block;width:100%;height:auto}
+.play{display:block;text-align:center;font-family:'Bangers';font-size:34px;letter-spacing:1px;color:#fff;text-shadow:2px 2px 0 var(--ink);border:4px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:8px}
+.c1 .play{background:var(--red)}.c2 .play{background:var(--green)}
+.tips{background:#fff;border:4px solid var(--ink);border-radius:8px;box-shadow:5px 5px 0 var(--ink);padding:12px 16px;font-size:16px;line-height:1.45}
+.tips h3{font-family:'Bangers';font-weight:400;font-size:26px;letter-spacing:1px;margin:0 0 4px}
+.tips ol{margin:4px 0 0;padding-left:22px}
 </style>
 </head>
 <body>
-<div id="app"></div>
-<div id="layer"></div>
+<main>
+  <header style="text-align:center">
+    <h1 class="title">THILO &amp; OPI</h1>
+    <div style="margin-top:12px"><span class="subtitle">Farben &amp; Formen – Spiele für zwei Handys</span></div>
+    <div class="heroes" aria-hidden="true">
+      <svg viewBox="-28 -32 50 58"><g id="kid"></g></svg>
+      <svg viewBox="-28 -32 50 58" style="transform:scaleX(-1)"><g id="opi"></g></svg>
+    </div>
+  </header>
+
+  <a class="card c1" href="https://claude.ai/artifact/QkLBYAu8pgHFe1dX8CvHdU">
+    <h2>🏃 Hindernisstrecke</h2>
+    <div class="pic"><svg viewBox="0 0 320 110" aria-hidden="true">
+      <rect width="320" height="110" fill="#8fd3ff"/>
+      <rect y="84" width="320" height="26" fill="#5cc35c"/><line x1="0" y1="84" x2="320" y2="84" stroke="#111" stroke-width="3"/>
+      <g stroke="#111" stroke-width="3">
+        <rect x="70" y="40" width="34" height="44" rx="4" fill="#E8312F"/><rect x="140" y="40" width="34" height="44" rx="4" fill="#FFD21F"/>
+        <rect x="210" y="40" width="34" height="44" rx="4" fill="#2F7DE1"/>
+      </g>
+      <g transform="translate(270,28)"><line x1="0" y1="0" x2="0" y2="56" stroke="#111" stroke-width="3"/>
+        <rect x="0" y="0" width="10" height="10" fill="#111"/><rect x="10" y="0" width="10" height="10" fill="#fff"/><rect x="0" y="10" width="10" height="10" fill="#fff"/><rect x="10" y="10" width="10" height="10" fill="#111"/>
+        <rect x="0" y="0" width="20" height="20" fill="none" stroke="#111" stroke-width="2"/></g>
+      <g transform="translate(36,64) scale(.8)" id="kidRun"></g>
+    </svg></div>
+    <p>Wettrennen durch bunte Tore. Thilo findet die richtige Farbe oder Form, dann geht das Tor auf. Mit jedem Level wird es etwas schwerer, bis ins Ziel.</p>
+    <span class="play">LOS GEHT'S! ▶</span>
+  </a>
+
+  <a class="card c2" href="https://claude.ai/artifact/98RotSg7aFTDKWutgR15pL">
+    <h2>🏰 Katapult-Duell</h2>
+    <div class="pic"><svg viewBox="0 0 320 110" aria-hidden="true">
+      <rect width="320" height="110" fill="#8fd3ff"/>
+      <path d="M100 90 Q160 30 220 90 Z" fill="#4fb04f" stroke="#111" stroke-width="3"/>
+      <rect y="88" width="320" height="22" fill="#5cc35c"/><line x1="0" y1="88" x2="320" y2="88" stroke="#111" stroke-width="3"/>
+      <g stroke="#111" stroke-width="2.5">
+        <rect x="10" y="64" width="22" height="22" rx="3" fill="#2F7DE1"/><rect x="34" y="64" width="22" height="22" rx="3" fill="#E8312F"/><rect x="10" y="40" width="22" height="22" rx="3" fill="#FFD21F"/>
+        <rect x="264" y="64" width="22" height="22" rx="3" fill="#2DB34A"/><rect x="288" y="64" width="22" height="22" rx="3" fill="#FFD21F"/><rect x="288" y="40" width="22" height="22" rx="3" fill="#E8312F"/>
+      </g>
+      <path d="M70 70 Q150 -10 240 40" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="4 6"/>
+      <circle cx="240" cy="40" r="8" fill="#E8312F" stroke="#111" stroke-width="2.5"/>
+      <g transform="translate(70,80)"><rect x="-14" y="0" width="28" height="7" rx="2" fill="#a0612d" stroke="#111" stroke-width="2"/><line x1="0" y1="0" x2="-14" y2="-14" stroke="#111" stroke-width="5" stroke-linecap="round"/><circle cx="-8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/><circle cx="8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/></g>
+      <g transform="translate(250,80) scale(-1,1)"><rect x="-14" y="0" width="28" height="7" rx="2" fill="#a0612d" stroke="#111" stroke-width="2"/><line x1="0" y1="0" x2="-14" y2="-14" stroke="#111" stroke-width="5" stroke-linecap="round"/><circle cx="-8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/><circle cx="8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/></g>
+    </svg></div>
+    <p>Jeder hat eine Burg aus bunten Blöcken. Ein Block fällt nur, wenn die Kugel passt – erst die Farbe, dann die Form, am Ende beides. Für jede abgeräumte Burg gibt es einen Stern.</p>
+    <span class="play">LOS GEHT'S! ▶</span>
+  </a>
+
+  <section class="tips">
+    <h3>So spielt ihr zu zweit</h3>
+    <ol>
+      <li>Beide Handys öffnen <b>dasselbe</b> Spiel (beide bei claude.ai angemeldet).</li>
+      <li>Ein Handy wählt „Ich bin Thilo“, das andere „Ich bin Opi“.</li>
+      <li>Warten, bis „✔ verbunden“ erscheint – dann <b>LOS!</b></li>
+    </ol>
+    <div style="margin-top:6px;opacity:.75">Allein geht es auch: Dann spielt der Robo-Gegner mit.</div>
+  </section>
+</main>
 <script>
-"use strict";
-/* ---------- Daten ---------- */
-const COLORS=[
- {id:'rot',name:'Rot',hex:'#E8312F',m:'roten',n:'rote',nm:'roter',nn:'rotes'},
- {id:'gelb',name:'Gelb',hex:'#FFD21F',m:'gelben',n:'gelbe',nm:'gelber',nn:'gelbes'},
- {id:'blau',name:'Blau',hex:'#2F7DE1',m:'blauen',n:'blaue',nm:'blauer',nn:'blaues'},
- {id:'gruen',name:'Grün',hex:'#2DB34A',m:'grünen',n:'grüne',nm:'grüner',nn:'grünes'},
- {id:'orange',name:'Orange',hex:'#FF8A1F',m:'orangen',n:'orange',nm:'oranger',nn:'oranges'},
- {id:'lila',name:'Lila',hex:'#9B4DCA',m:'lila',n:'lila',nm:'lila',nn:'lila'}
-];
-const SHAPES=[
- {id:'kreis',name:'Kreis',g:'m'},{id:'quadrat',name:'Quadrat',g:'n'},{id:'dreieck',name:'Dreieck',g:'n'},
- {id:'stern',name:'Stern',g:'m'},{id:'herz',name:'Herz',g:'n'}
-];
-const ANIMALS=[['hund','🐶'],['katze','🐱'],['frosch','🐸'],['loewe','🦁'],['baer','🐻'],['hase','🐰']];
-const BURSTS=['ZACK!','POW!','WUSCH!','BÄM!','SUPER!','JAWOLL!'];
-const PRAISE=['Super!','Toll!','Klasse!','Prima!','Ja, genau!','Spitze!'];
-const DEFAULT_CFG={stufe:1,inhalt:'farben',colors:['rot','gelb','blau','gruen'],shapes:['kreis','quadrat','dreieck'],kidOpts:3,papaLevel:'mittel',ms:5,fair:true,bot:'mittel'};
-
-/* ---------- Hilfen ---------- */
-const $=s=>document.querySelector(s);
-const rnd=a=>a[Math.floor(Math.random()*a.length)];
-const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const uid=()=>Math.random().toString(36).slice(2,9);
-function store(k,v){try{if(v===undefined){const x=localStorage.getItem('hs_'+k);return x?JSON.parse(x):null}localStorage.setItem('hs_'+k,JSON.stringify(v))}catch(e){return null}}
-
-/* ---------- Zeichnungen ---------- */
-function starPts(){let p=[];for(let i=0;i<10;i++){const r=i%2?19:44,a=(-90+i*36)*Math.PI/180;p.push((50+r*Math.cos(a)).toFixed(1)+','+(54+r*Math.sin(a)).toFixed(1))}return p.join(' ')}
-const STAR=starPts();
-const KLECKS="M50 9C62 9 66 21 76 19C90 17 93 33 87 43C81 53 95 60 89 74C83 88 66 82 58 90C50 98 37 91 29 86C17 80 7 73 11 59C15 47 5 39 13 27C21 15 37 21 41 13C43 10 47 9 50 9Z";
-function shapeSVG(shapeId,hex){
-  const st=`fill="${hex}" stroke="#111" stroke-width="6" stroke-linejoin="round"`;
-  let body='',hl='';
-  switch(shapeId){
-    case 'kreis':body=`<circle cx="50" cy="50" r="40" ${st}/>`;hl='M26 42 Q30 26 46 22';break;
-    case 'quadrat':body=`<rect x="12" y="12" width="76" height="76" rx="5" ${st}/>`;hl='M22 44 L22 22 L44 22';break;
-    case 'dreieck':body=`<polygon points="50,8 93,88 7,88" ${st}/>`;hl='M38 46 L48 28';break;
-    case 'stern':body=`<polygon points="${STAR}" ${st}/>`;hl='';break;
-    case 'herz':body=`<path d="M50 89C22 68 4 50 13 29C21 11 43 13 50 30C57 13 79 11 87 29C96 50 78 68 50 89Z" ${st}/>`;hl='M22 34 Q26 22 38 22';break;
-    default:body=`<path d="${KLECKS}" ${st}/>`;hl='M24 40 Q28 26 42 24';
-  }
-  return `<svg viewBox="0 0 100 100" aria-hidden="true">${body}${hl?`<path d="${hl}" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".75"/>`:''}</svg>`;
-}
-function itemSVG(it){
-  if(it.kind==='farbe')return shapeSVG('klecks',it.c.hex);
-  if(it.kind==='form')return shapeSVG(it.s.id,it.rc.hex);
-  return shapeSVG(it.s.id,it.c.hex);
-}
 function heroG(role){
   const kid=role==='kid';
   const cape=kid?'#E8312F':'#2F7DE1',suit=kid?'#FFD21F':'#7fd3ff',skin=kid?'#FFD3A8':'#F6C9A4';
   const L='stroke="#111" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"';
-  // Umhang, Füße, Körper
   let g=`<path d="M-4 4 Q-20 8 -24 22 Q-12 18 -2 20 Z" fill="${cape}" ${L}/>
    <ellipse cx="-4" cy="21" rx="4.5" ry="3" fill="#6b3f1d" ${L}/><ellipse cx="6" cy="21" rx="4.5" ry="3" fill="#6b3f1d" ${L}/>
    <ellipse cx="1" cy="12" rx="9" ry="8.5" fill="${suit}" ${L}/>
-   <polygon points="${'1,7.5 2.4,10.6 5.6,10.8 3.1,12.8 4,16 1,14.2 -2,16 -1.1,12.8 -3.6,10.8 -0.4,10.6'}" fill="#fff" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/>
-   <ellipse cx="9" cy="10" rx="3" ry="2.6" fill="${skin}" ${L}/>`;
-  // Kopf
-  g+=`<circle cx="1" cy="-8" r="14" fill="${skin}" ${L}/>`;
-  if(kid){
-    g+=`<path d="M-12 -12 Q-10 -24 2 -23 Q14 -23 15 -11 Q9 -16 3 -15 Q4 -19 -1 -19 Q0 -15 -5 -14 Q-8 -14 -12 -12 Z" fill="#8a5426" ${L}/>
-     <path d="M2 -23 Q4 -29 9 -28" fill="none" ${L}/>`;
-  }else{
-    g+=`<path d="M-12 -6 Q-17 -9 -13 -14 Q-15 -18 -9 -18" fill="#fff" ${L}/>
-     <path d="M14 -6 Q18 -10 14 -14" fill="#fff" ${L}/>
-     <path d="M-4 -19 Q0 -21 4 -19" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>`;
-  }
-  // Augen (groß, glänzend)
+   <polygon points="1,7.5 2.4,10.6 5.6,10.8 3.1,12.8 4,16 1,14.2 -2,16 -1.1,12.8 -3.6,10.8 -0.4,10.6" fill="#fff" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/>
+   <ellipse cx="9" cy="10" rx="3" ry="2.6" fill="${skin}" ${L}/>
+   <circle cx="1" cy="-8" r="14" fill="${skin}" ${L}/>`;
+  if(kid){g+=`<path d="M-12 -12 Q-10 -24 2 -23 Q14 -23 15 -11 Q9 -16 3 -15 Q4 -19 -1 -19 Q0 -15 -5 -14 Q-8 -14 -12 -12 Z" fill="#8a5426" ${L}/><path d="M2 -23 Q4 -29 9 -28" fill="none" ${L}/>`}
+  else{g+=`<path d="M-12 -6 Q-17 -9 -13 -14 Q-15 -18 -9 -18" fill="#fff" ${L}/><path d="M14 -6 Q18 -10 14 -14" fill="#fff" ${L}/><path d="M-4 -19 Q0 -21 4 -19" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>`}
   g+=`<ellipse cx="-2" cy="-8" rx="2.6" ry="3.4" fill="#111"/><ellipse cx="8" cy="-8" rx="2.6" ry="3.4" fill="#111"/>
    <circle cx="-1.1" cy="-9.4" r="1.1" fill="#fff"/><circle cx="8.9" cy="-9.4" r="1.1" fill="#fff"/>
    <ellipse cx="-6" cy="-2.5" rx="2.8" ry="1.7" fill="#ff8fa3" opacity=".75"/><ellipse cx="12" cy="-2.5" rx="2.8" ry="1.7" fill="#ff8fa3" opacity=".75"/>`;
-  if(kid){
-    g+=`<path d="M1 -2.5 Q3 0.5 5 -2.5" fill="#e8584f" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/>`;
-  }else{
-    g+=`<circle cx="-2" cy="-8" r="4.6" fill="none" stroke="#111" stroke-width="1.6"/><circle cx="8" cy="-8" r="4.6" fill="none" stroke="#111" stroke-width="1.6"/>
-     <path d="M2.6 -8.5 L3.4 -8.5" stroke="#111" stroke-width="1.6"/>
-     <path d="M3 -2.6 Q-1 -4.5 -2.5 -1.2 Q0.5 0.3 3 -1.2 Q5.5 0.3 8.5 -1.2 Q7 -4.5 3 -2.6 Z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/>
-     <path d="M1.5 1 Q3 2.5 4.5 1" fill="none" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>`;
-  }
+  if(kid){g+=`<path d="M1 -2.5 Q3 0.5 5 -2.5" fill="#e8584f" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/>`}
+  else{g+=`<circle cx="-2" cy="-8" r="4.6" fill="none" stroke="#111" stroke-width="1.6"/><circle cx="8" cy="-8" r="4.6" fill="none" stroke="#111" stroke-width="1.6"/><path d="M2.6 -8.5 L3.4 -8.5" stroke="#111" stroke-width="1.6"/>
+     <path d="M3 -2.6 Q-1 -4.5 -2.5 -1.2 Q0.5 0.3 3 -1.2 Q5.5 0.3 8.5 -1.2 Q7 -4.5 3 -2.6 Z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/><path d="M1.5 1 Q3 2.5 4.5 1" fill="none" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>`}
   return g;
 }
-function heroSVG(role,w){return `<svg viewBox="-28 -32 50 58" width="${w||'100%'}" aria-hidden="true"><g>${heroG(role)}</g></svg>`}
-function burstSVG(){let p=[];for(let i=0;i<20;i++){const r=i%2?32:50,a=(i*18)*Math.PI/180;p.push((50+r*Math.cos(a)*1.25).toFixed(1)+','+(50+r*Math.sin(a)).toFixed(1))}
-  return `<svg viewBox="-15 -5 130 110" preserveAspectRatio="none"><polygon points="${p.join(' ')}" fill="#FFD21F" stroke="#111" stroke-width="4" stroke-linejoin="round"/></svg>`}
-function trophySVG(gold,label){
-  const c=gold?'#FFD21F':'#7fd3ff',c2=gold?'#e0a800':'#3a9fd6';
-  return `<svg viewBox="0 0 120 140"><path d="M30 18 H90 V52 Q90 84 60 88 Q30 84 30 52Z" fill="${c}" stroke="#111" stroke-width="5"/>
-   <path d="M30 28 Q8 28 12 46 Q16 60 32 60" fill="none" stroke="#111" stroke-width="5"/><path d="M90 28 Q112 28 108 46 Q104 60 88 60" fill="none" stroke="#111" stroke-width="5"/>
-   <rect x="52" y="88" width="16" height="18" fill="${c2}" stroke="#111" stroke-width="5"/><rect x="34" y="106" width="52" height="20" rx="4" fill="${c2}" stroke="#111" stroke-width="5"/>
-   <text x="60" y="66" text-anchor="middle" font-family="Bangers" font-size="34" fill="#fff" stroke="#111" stroke-width="2">${label}</text>
-   <path d="M42 30 Q40 44 46 56" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/></svg>`;
-}
-
-/* ---------- Ton & Sprache ---------- */
-let AC=null;
-function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(e){}return AC}
-function tone(f,t0,d,type,vol){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type||'square';o.frequency.setValueAtTime(f,a.currentTime+t0);
-  g.gain.setValueAtTime(0,a.currentTime+t0);g.gain.linearRampToValueAtTime(vol||.12,a.currentTime+t0+.01);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
-  o.connect(g).connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.05)}
-function sfx(k){if(!S.local.sound)return;
-  if(k==='ok'){[523,659,784,1046].forEach((f,i)=>tone(f,i*.08,.18,'square',.09))}
-  else if(k==='no'){tone(220,0,.18,'triangle',.18);tone(180,.15,.25,'triangle',.18)}
-  else if(k==='tick'){tone(660,0,.12,'square',.08)}
-  else if(k==='go'){tone(880,0,.35,'square',.1)}
-  else if(k==='win'){[523,523,523,659,784,659,784,1046].forEach((f,i)=>tone(f,i*.13,.22,'square',.09))}
-  else if(k==='slip'){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type='sawtooth';o.frequency.setValueAtTime(900,a.currentTime);o.frequency.exponentialRampToValueAtTime(120,a.currentTime+.7);g.gain.setValueAtTime(.08,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.75);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+.8)}
-}
-let deVoice=null;
-function pickVoice(){try{const v=speechSynthesis.getVoices().filter(x=>/^de/i.test(x.lang));const score=x=>(/premium|enhanced|neural|natural|online/i.test(x.name)?10:0)+(/google/i.test(x.name)?6:0)+(/anna|petra|helena|katja|marlene|vicki/i.test(x.name)?4:0)+(/de-DE/i.test(x.lang)?2:0)+(x.localService===false?1:0);v.sort((a,b)=>score(b)-score(a));deVoice=v[0]||null}catch(e){}}
-if(window.speechSynthesis){pickVoice();try{speechSynthesis.onvoiceschanged=pickVoice}catch(e){}}
-let TTS=null;
-/* Menschliche Stimme: Claude-Stimme, sonst beste deutsche Handystimme */
-function deviceSay(text){
-  try{
-    if(!window.speechSynthesis)return false;
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';if(deVoice)u.voice=deVoice;u.rate=.95;u.pitch=1;u.volume=1;
-    speechSynthesis.speak(u);return true;
-  }catch(e){return false}
-}
-function say(text){
-  if(!S.local.sound||S.role!=='kid')return;
-  if(TTS){TTS.speak(text,{language:'de',rate:.95}).catch(()=>deviceSay(text));return}
-  deviceSay(text);
-}
-
-/* ---------- Zustand ---------- */
-const S={
-  screen:'role',role:store('role'),animal:null,
-  cfg:Object.assign({},DEFAULT_CFG,store('cfg')||{}),
-  local:Object.assign({sound:true},store('local')||{}),
-  lobby:null,room:null,unsub:null,peers:[],roomState:'wait',
-  seen:new Set(),ready:false,g:null,answered:new Set(),me:uid()
-};
-
-/* ---------- Raum (zwei Handys) ---------- */
-function cap(name){return new Promise(res=>{let n=0;(function t(){if(window.claude&&window.claude.use){window.claude.use(name).then(res,()=>res(null))}else if(n++<30)setTimeout(t,100);else res(null)})()})}
-const roomP=cap('room').then(r=>{S.lobby=r;S.roomState=r?'ok':'none';if(S.screen==='lobby')render();return r});
-cap('tts').then(t=>{TTS=t});
-
-function pres(patch){if(S.room)S.room.presence(patch).catch(()=>{})}
-function others(){return S.peers.filter(p=>!p.sameTab&&p.kind!=='agent'&&p.presence&&p.presence.role)}
-function opp(){const want=S.role==='kid'?'papa':'kid';const l=others().filter(p=>p.presence.role===want);l.sort((a,b)=>b.updatedAt-a.updatedAt);return l[0]||null}
-function papaPeer(){return S.role==='kid'?opp():null}
-
-async function joinRoom(){
-  if(S.joining||S.room)return;S.joining=true;
-  const lobby=await roomP;if(!lobby){S.joining=false;return}
-  try{
-    if(S.unsub){S.unsub();S.unsub=null}
-    if(S.room){await S.room.leave().catch(()=>{});S.room=null}
-    S.peers=[];S.ready=false;
-    const r=await lobby.join('hs-thilo-opi');
-    S.room=r;
-    S.unsub=r.onPeers(ch=>{S.peers=ch.peers;onPeers()},()=>{});
-    pres({role:S.role,cfg:S.role==='papa'?S.cfg:null,gid:null,pos:0,fin:false,ask:null,ok:null});
-    setTimeout(()=>{others().forEach(p=>{const st=p.presence.start;if(st&&st.gid)S.seen.add(st.gid)});S.ready=true},1500);
-    if(S.screen==='lobby')renderLobbyStatus();
-  }catch(e){S.roomState='none';S.joining=false;if(S.screen==='lobby')renderLobbyStatus()}
-}
-
-function onPeers(){
-  // Spielstart von anderem Handy?
-  others().forEach(p=>{const st=p.presence.start;
-    if(st&&typeof st.gid==='string'&&!S.seen.has(st.gid)){S.seen.add(st.gid);if(S.ready)startGame(st.gid)}});
-  if(S.screen==='lobby')renderLobbyStatus();
-  if(S.screen==='game'){renderTrack();checkAsk();checkOk();checkStop()}
-}
-
-/* ---------- Aufgaben ---------- */
-const keyOf=it=>it.kind==='farbe'?it.c.id:it.kind==='form'?it.s.id:it.c.id+'-'+it.s.id;
-function enabledColors(cfg){const l=COLORS.filter(c=>cfg.colors.includes(c.id));return l.length>=2?l:COLORS.slice(0,4)}
-function enabledShapes(cfg){const l=SHAPES.filter(s=>cfg.shapes.includes(s.id));return l.length>=2?l:SHAPES.slice(0,3)}
-function genTask(cfg,prev){
-  const id=uid();
-  if(S.role==='kid'){
-    const cols=enabledColors(cfg),shp=enabledShapes(cfg);
-    let kind=cfg.inhalt==='farben'?'farbe':cfg.inhalt==='formen'?'form':(Math.random()<.5?'farbe':'form');
-    const pool=kind==='farbe'?cols:shp;
-    const n=Math.min(cfg.kidOpts,pool.length);
-    let cand=pool.filter(x=>x.id!==prev);if(!cand.length)cand=pool;
-    const t=rnd(cand);
-    const picks=shuffle([t,...shuffle(pool.filter(x=>x!==t)).slice(0,n-1)]);
-    const mk=x=>kind==='farbe'?{kind,c:x}:{kind,s:x,rc:rnd(cols)};
-    const opts=picks.map(mk);const target=opts[picks.indexOf(t)];
-    const name=kind==='farbe'?t.name:t.name;
-    const speak=kind==='farbe'?`Zeig mir: ${t.name}!`:`Zeig mir ${t.g==='m'?'den':'das'} ${t.name}!`;
-    const answer=kind==='farbe'?`${t.name}!`:`Das ist ${t.g==='m'?'ein':'ein'} ${t.name}.`;
-    return {id,kind,target,opts,name,speak,answer,key:t.id};
-  }
-  // Opi: Farbe + Form kombiniert
-  const lvl=cfg.papaLevel;
-  const cols=lvl==='schwer'?COLORS:enabledColors(cfg),shp=lvl==='schwer'?SHAPES:enabledShapes(cfg);
-  const all=[];cols.forEach(c=>shp.forEach(s=>all.push({kind:'combo',c,s})));
-  const n=Math.min(lvl==='leicht'?4:6,all.length);
-  let cand=all.filter(x=>keyOf(x)!==prev);if(!cand.length)cand=all;
-  const t=rnd(cand);
-  const rest=all.filter(x=>x!==t);
-  const sameC=shuffle(rest.filter(x=>x.c===t.c)).slice(0,2),sameS=shuffle(rest.filter(x=>x.s===t.s)).slice(0,2);
-  let ds=[...sameC,...sameS];
-  shuffle(rest).forEach(x=>{if(ds.length<n-1&&!ds.includes(x))ds.push(x)});
-  ds=ds.slice(0,n-1);
-  const opts=shuffle([t,...ds]);
-  const adj=t.s.g==='m'?t.c.nm:t.c.nn;
-  const name=adj.charAt(0).toUpperCase()+adj.slice(1)+' '+t.s.name;
-  const ink=lvl==='schwer'?rnd(COLORS.filter(c=>c!==t.c)).hex:'#111';
-  return {id,kind:'combo',target:t,opts,name,ink,key:keyOf(t)};
-}
-
-/* ---------- Spielablauf ---------- */
-function requestStart(){
-  const gid=uid();S.seen.add(gid);
-  pres({start:{gid}});
-  startGame(gid);
-}
-function startGame(gid){
-  ac();closeLayer();
-  let cfg=S.cfg;
-  const pp=papaPeer();
-  if(pp&&pp.presence.cfg&&typeof pp.presence.cfg==='object')cfg=Object.assign({},DEFAULT_CFG,pp.presence.cfg);
-  const o=opp();
-  S.g={gid,cfg,ms:(cfg.ms===10?10:5),ended:false,pos:0,task:null,wrongs:0,locked:true,fin:false,rank:0,oppReal:!!o,oppLast:0,oppFinAt:0,
-       bot:{pos:0,t:null,trail:[]},askN:0,askId:null,prevKey:null,final:false,tasks:[]};
-  pres({gid,pos:0,fin:false,ask:null,ok:null,stop:null});
-  S.screen='game';render();
-  countdown(()=>{startBot();nextGate()});
-}
-function countdown(done){
-  let n=3;const L=$('#layer');
-  const step=()=>{
-    if(n>0){L.innerHTML=`<div class="overlay"><div class="count">${n}</div></div>`;sfx('tick');n--;setTimeout(step,850)}
-    else{L.innerHTML=`<div class="overlay"><div class="count">LOS!</div></div>`;sfx('go');setTimeout(()=>{closeLayer();done()},700)}
-  };step();
-}
-function closeLayer(){$('#layer').innerHTML=''}
-function oppPos(){const g=S.g;if(!g)return 0;
-  if(g.oppReal){const o=opp();if(o&&o.presence.gid===g.gid&&typeof o.presence.pos==='number'){g.oppLast=Math.max(0,Math.min(100000,Math.floor(o.presence.pos)))}return g.oppLast}
-  return g.bot.pos}
-function startBot(){
-  const g=S.g;if(g.oppReal)return;
-  const base={langsam:10000,mittel:7000,schnell:4500}[g.cfg.bot]||7000;
-  const botIsPapa=S.role==='kid';
-  const tick=()=>{if(S.g!==g||g.ended)return;
-    const ahead=g.bot.pos-g.pos;
-    if(!(botIsPapa&&g.cfg.fair&&ahead>=2)){g.bot.trail[g.bot.pos]=rnd(enabledColors(g.cfg)).hex;g.bot.pos++;renderTrack()}
-    g.bot.t=setTimeout(tick,base*(0.8+Math.random()*.4)*(botIsPapa?1:0.7));
-  };
-  g.bot.t=setTimeout(tick,base);
-}
-/* Tor-Farben: jedes Tor hat die Farbe seiner Aufgabe – auf der Strecke und an der Tür */
-function taskAt(i){const g=S.g;
-  for(let k=g.tasks.length;k<=i;k++){const prev=k>0?g.tasks[k-1].key:null;g.tasks[k]=genTask(g.cfg,prev)}
-  return g.tasks[i]}
-function gateHex(t){return t.kind==='form'?t.rc.hex:t.target.c.hex}
-function hiddenColors(){const g=S.g;return S.role==='kid'?g.cfg.stufe===2:g.cfg.papaLevel!=='leicht'}
-function myTrail(){const g=S.g;const from=Math.max(0,g.pos-10);const h=[];for(let i=from;i<g.pos;i++)h.push(gateHex(g.tasks[i]));return {from,h}}
-function oppTrailHex(i){const g=S.g;
-  if(!g.oppReal)return g.bot.trail[i]||null;
-  const o=opp();const t=o&&o.presence.gid===g.gid&&o.presence.trail;
-  if(t&&Array.isArray(t.h)&&typeof t.from==='number'){const v=t.h[i-t.from];if(typeof v==='string'&&/^#[0-9a-fA-F]{6}$/.test(v))return v}
-  return null}
-function nextGate(){
-  const g=S.g;if(!g||g.ended)return;
-  g.wrongs=0;g.locked=true;
-  // Fairness: Opi rutscht aus, wenn er zu weit vorne ist
-  if(S.role==='papa'&&g.cfg.fair&&g.pos-oppPos()>=2){
-    renderStageBanana();sfx('slip');
-    setTimeout(()=>{if(S.g===g)nextGate2()},3200);return;
-  }
-  nextGate2();
-}
-function nextGate2(){
-  const g=S.g;
-  g.task=taskAt(g.pos);g.locked=false;
-  renderStage();renderOpts();
-  if(S.role==='kid'){
-    if(g.cfg.stufe===3){say('Wie heißt das?');setAsk()}
-    else setTimeout(()=>say(g.task.speak),250);
-  }
-}
-function pick(i,el){
-  const g=S.g;if(!g||g.locked||g.ended)return;ac();
-  const o=g.task.opts[i];
-  if(keyOf(o)===keyOf(g.task.target)){el.classList.add('right');correct()}
-  else wrong(el);
-}
-function correct(){
-  const g=S.g;g.locked=true;sfx('ok');
-  if(S.role==='kid')say(rnd(PRAISE)+' '+(g.task.kind==='farbe'?g.task.target.c.name:g.task.target.s.name)+'!');
-  const b=$('#burst');if(b){b.querySelector('span').textContent=rnd(BURSTS);b.classList.remove('show');void b.offsetWidth;b.classList.add('show')}
-  const dd=$('#door');if(dd&&hiddenColors()){dd.style.backgroundColor=gateHex(g.task);dd.style.backgroundImage='repeating-linear-gradient(90deg,transparent 0 22%,rgba(0,0,0,.28) 22% 24%)'}
-  setTimeout(()=>{const d=$('#door');if(d)d.classList.add('open');const h=$('#herobig');if(h)h.classList.add('run')},350);
-  setTimeout(()=>{
-    if(S.g!==g||g.ended)return;
-    g.pos++;pres({pos:g.pos,ask:null,trail:myTrail()});renderTrack();
-    if(g.pos%g.ms===0)milestone();else nextGate();
-  },1500);
-}
-function wrong(el){
-  const g=S.g;g.wrongs++;sfx('no');
-  el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');
-  if(S.role==='kid'){
-    setTimeout(()=>el.classList.add('gone'),450);
-    say('Hmm, nochmal! '+g.task.speak);
-    if(g.wrongs>=2){const i=g.task.opts.indexOf(g.task.target);const t=document.querySelectorAll('.opt')[i];if(t)t.classList.add('hint')}
-  }else{
-    g.locked=true;const b=$('#burst');
-    if(b){b.querySelector('span').textContent='AUTSCH!';b.classList.remove('show');void b.offsetWidth;b.classList.add('show')}
-    setTimeout(()=>{if(S.g===g)g.locked=false},1000);
-  }
-}
-/* Stufe 3: Benennen – Opi bestätigt */
-function setAsk(){const g=S.g;g.askN++;g.askId=g.task.id+'-'+g.askN;
-  if(opp())pres({ask:{id:g.askId,name:g.task.kind==='farbe'?g.task.target.c.name:g.task.target.s.name,kind:g.task.kind}})}
-function checkOk(){
-  const g=S.g;if(!g||S.role!=='kid'||!g.askId||g.locked)return;
-  const o=opp();const ok=o&&o.presence.ok;
-  if(ok&&ok.id===g.askId){
-    if(ok.good){g.askId=null;correct()}
-    else{sfx('no');say('Hör mal: '+g.task.answer+' Sag es nochmal!');setAsk()}
-  }
-}
-function confirmSolo(good){const g=S.g;if(!g||g.locked)return;if(good)correct();else say(g.task.answer)}
-function checkAsk(){
-  if(S.role!=='papa'||!S.g)return;
-  const o=opp();const a=o&&o.presence.ask;
-  const L=$('#layer');
-  if(a&&typeof a.id==='string'&&!S.answered.has(a.id)&&o.presence.gid===S.g.gid){
-    if(L.dataset.ask===a.id)return;
-    L.dataset.ask=a.id;
-    const nm=String(a.name||'').slice(0,20);
-    const c=COLORS.find(x=>x.name===nm),s=SHAPES.find(x=>x.name===nm);
-    const pic=c?shapeSVG('klecks',c.hex):s?shapeSVG(s.id,'#FFD21F'):'';
-    L.innerHTML=`<div class="overlay"><div class="panel center">
-      <h2 class="bang" style="font-size:30px">🗣️ Thilo sagt …</h2>
-      <div style="width:110px;margin:8px auto">${pic}</div>
-      <div class="muted">Richtig wäre:</div><div class="bang" style="font-size:44px;color:var(--red);-webkit-text-stroke:1px #111">${escapeHtml(nm)}</div>
-      <div class="row" style="margin-top:12px"><button class="btn green grow" data-act="askok">👍 Richtig!</button><button class="btn grow" data-act="askno">🔁 Nochmal</button></div>
-      <div class="muted" style="margin-top:8px">Auch Gebärde oder Annäherung zählt – du entscheidest.</div></div></div>`;
-  }else if(L.dataset.ask&&(!a||a.id!==L.dataset.ask)){L.dataset.ask='';L.innerHTML=''}
-}
-function answerAsk(good){
-  const L=$('#layer');const id=L.dataset.ask;if(!id)return;
-  S.answered.add(id);pres({ok:{id,good}});L.dataset.ask='';L.innerHTML='';
-}
-const LEVELS=['Ziegel-Stadt','Hecken-Wald','Eis-Land','Weltall'];
-function milestone(){
-  const g=S.g;const lvl=Math.floor(g.pos/g.ms);
-  sfx('win');
-  if(S.role==='kid')say('Super! Schon '+g.pos+' Tore! Weiter gehts!');
-  const st=$('#stage');
-  if(st)st.innerHTML=`<div class="panel center"><div class="bang" style="font-size:26px">${g.pos} Tore geschafft!</div>
-    <h1 class="title" style="font-size:58px">LEVEL ${lvl+1}!</h1>
-    <div style="width:120px;margin:6px auto">${trophySVG(true,'★')}</div>
-    <div class="bang" style="font-size:26px">Weiter ins ${LEVELS[lvl%4]} …</div></div>`;
-  const o=$('#opts');if(o)o.innerHTML='';
-  setTimeout(()=>{if(S.g===g&&!g.ended)nextGate()},2600);
-}
-function checkStop(){
-  const g=S.g;if(!g||g.ended)return;const o=opp();
-  if(o&&o.presence.stop===g.gid)endRound(true);
-}
-function endRound(remote){
-  const g=S.g;if(!g||g.ended)return;
-  g.ended=true;g.locked=true;if(g.bot.t)clearTimeout(g.bot.t);
-  if(!remote)pres({stop:g.gid});
-  closeLayer();renderTrack();renderResults();
-}
-
-/* ---------- Rendering ---------- */
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function render(){
-  const A=$('#app');
-  if(S.screen==='role'||!S.role){S.screen='role';A.innerHTML=roleHTML();return}
-  if(S.screen==='lobby'){A.innerHTML=lobbyHTML();renderLobbyStatus();return}
-  if(S.screen==='game'){A.innerHTML=`<div class="topbar"><span class="bang">Hindernisstrecke ∞</span><button class="btn small" data-act="stop">🏁 Ende</button></div>
-    <div class="panel track" id="track"></div><div id="stage"></div><div id="opts"></div>`;renderTrack();return}
-}
-function roleHTML(){
-  return `<div class="center"><h1 class="title">HINDERNIS&shy;STRECKE!</h1><div style="margin-top:10px"><span class="subtitle">Endlos-Lauf: Farben &amp; Formen</span></div></div>
-  <div class="panel"><h2 class="bang center" style="font-size:30px;margin-bottom:10px">Wer spielt auf diesem Handy?</h2>
-   <div class="roles">
-    <div class="rolecard kid" data-act="role" data-v="kid">${heroSVG('kid')}<div class="bang">Ich bin Thilo</div></div>
-    <div class="rolecard papa" data-act="role" data-v="papa">${heroSVG('papa')}<div class="bang">Ich bin Opi</div></div>
-   </div></div>
-  <div class="panel muted">So geht's: Beide Handys öffnen diese Seite. Ein Handy wählt „Thilo“, das andere „Opi“ – schon seid ihr verbunden.</div>`;
-}
-function lobbyHTML(){
-  const isPapa=S.role==='papa';
-  return `<div class="topbar"><button class="btn small" data-act="back">◀</button><span class="bang" style="font-size:30px">${isPapa?'Opi':'Thilo'}</span>
-     <button class="btn small" data-act="sound">${S.local.sound?'🔊':'🔇'}</button></div>
-   <div class="panel center"><div style="width:130px;margin:0 auto">${heroSVG(S.role)}</div>
-     <div class="status" id="lstatus"></div></div>
-   ${isPapa?settingsHTML():''}
-   <button class="btn go" data-act="start">LOS!</button>
-   ${!isPapa?`<div class="center"><button class="btn small" data-act="kidset">⚙ Einstellungen (für Erwachsene)</button></div>`:''}`;
-}
-function renderLobbyStatus(){
-  const el=$('#lstatus');if(!el)return;
-  if(S.roomState==='wait'){el.innerHTML='<span class="pill">Verbinde …</span>';return}
-  if(S.roomState==='none'){el.innerHTML='<span class="pill noconn">Keine Verbindung möglich</span><div class="muted" style="margin-top:6px">Ihr könnt trotzdem spielen – gegen den Robo-Gegner.</div>';return}
-  const o=opp();
-  const who=S.role==='kid'?'Opi':'Thilo';
-  el.innerHTML=o?`<span class="pill ok">✔ ${who} ist da!</span>${S.role==='kid'?'<span class="pill">Opi stellt das Spiel ein</span>':''}`
-                :`<span class="pill">⏳ Warte auf ${who} …</span><div class="muted" style="margin-top:6px">Oder einfach LOS – dann spielt der Robo mit.</div>`;
-}
-function seg(name,opts,cur){return `<div class="seg">${opts.map(([v,l])=>`<button class="${String(cur)===String(v)?'on':''}" data-act="cfg" data-k="${name}" data-v="${v}">${l}</button>`).join('')}</div>`}
-function settingsHTML(){
-  const c=S.cfg;
-  return `<details class="panel" ${store('openset')===false?'':'open'} id="setbox"><summary>⚙ Einstellungen</summary>
-   <div class="set"><label class="lbl">Lernstufe Thilo</label>${seg('stufe',[[1,'1 · Zuordnen'],[2,'2 · Hören &amp; Zeigen'],[3,'3 · Benennen']],c.stufe)}
-     <div class="muted" style="margin-top:4px">${['','Bild wird gezeigt – das Gleiche finden.','Das Wort wird vorgesprochen – das Richtige antippen.','Thilo sagt das Wort laut, Opi bestätigt hier auf seinem Handy.'][c.stufe]}</div></div>
-   <div class="set"><label class="lbl">Thilo übt</label>${seg('inhalt',[['farben','Farben'],['formen','Formen'],['beides','Beides']],c.inhalt)}</div>
-   <div class="set"><label class="lbl">Farben</label><div class="seg">${COLORS.map(x=>`<button class="sw ${c.colors.includes(x.id)?'on':''}" style="background:${x.hex}" title="${x.name}" data-act="tog" data-k="colors" data-v="${x.id}"></button>`).join('')}</div></div>
-   <div class="set"><label class="lbl">Formen</label><div class="seg">${SHAPES.map(x=>`<button class="shp ${c.shapes.includes(x.id)?'on':''}" title="${x.name}" data-act="tog" data-k="shapes" data-v="${x.id}">${shapeSVG(x.id,c.shapes.includes(x.id)?'#FFD21F':'#ddd')}</button>`).join('')}</div></div>
-   <div class="set"><label class="lbl">Auswahl-Felder für Thilo</label>${seg('kidOpts',[[2,'2'],[3,'3'],[4,'4']],c.kidOpts)}</div>
-   <div class="set"><label class="lbl">Opi-Schwierigkeit</label>${seg('papaLevel',[['leicht','Leicht (Bild)'],['mittel','Mittel (Wort)'],['schwer','Schwer (Wort in falscher Farbe)']],c.papaLevel)}</div>
-   <div class="set"><label class="lbl">Endlos-Lauf: neues Level alle …</label>${seg('ms',[[5,'5 Tore'],[10,'10 Tore']],c.ms)}<div class="muted" style="margin-top:4px">Das Spiel läuft, bis jemand auf „🏁 Ende“ tippt.</div></div>
-   <div class="set"><label class="lbl">Fairness-Hilfe: Opi rutscht auf Bananenschalen aus, wenn er 2 Tore vorne liegt</label>${seg('fair',[[true,'An'],[false,'Aus']],c.fair)}</div>
-   <div class="set"><label class="lbl">Robo-Gegner (wenn niemand verbunden ist)</label>${seg('bot',[['langsam','Langsam'],['mittel','Mittel'],['schnell','Schnell']],c.bot)}</div>
-  </details>`;
-}
-function setCfg(k,v){
-  const c=S.cfg;
-  if(k==='stufe'||k==='kidOpts'||k==='ms')c[k]=+v;else if(k==='fair')c[k]=(v==='true');else c[k]=v;
-  saveCfg();
-}
-function toggleCfg(k,v){const l=S.cfg[k];const i=l.indexOf(v);if(i>=0){if(l.length>2)l.splice(i,1)}else l.push(v);saveCfg()}
-function saveCfg(){store('cfg',S.cfg);if(S.role==='papa')pres({cfg:S.cfg});
-  const box=$('#setbox');const sy=window.scrollY;
-  if(S.screen==='lobby'){render();window.scrollTo(0,sy)}
-  if($('#kidset'))openKidSettings();
-}
-function openKidSettings(){$('#layer').innerHTML=`<div class="overlay" id="kidset" style="align-items:flex-start;overflow:auto"><div style="max-width:520px;width:100%">${settingsHTML().replace('<details','<div').replace('</details>','</div>').replace(/<summary>.*?<\/summary>/,'<h2 class="bang" style="font-size:26px">⚙ Einstellungen</h2><div class="muted">Wenn Opi verbunden ist, gelten seine Einstellungen.</div>')}<button class="btn go" style="margin-top:12px;font-size:30px" data-act="closeset">Fertig</button></div></div>`}
-
-function renderTrack(){
-  const el=$('#track');if(!el||!S.g)return;const g=S.g;
-  const VIS=8,x0=58,x1=380,dx=(x1-x0)/VIS;
-  const me=S.role,other=me==='kid'?'papa':'kid';
-  const yMe=34,yOp=90,op=oppPos();
-  const lo=Math.min(g.pos,op),hi=Math.max(g.pos,op);
-  let start=Math.max(0,lo-1);if(hi-start>VIS-1)start=hi-(VIS-1);
-  let gates='';
-  for(let i=start+1;i<=start+VIS;i++){const x=x0+(i-start)*dx;
-    const WOOD='#a0612d';
-    // eigene Spur: Farbe der Aufgabe (bei Hör-/Wort-Stufen erst nach dem Öffnen)
-    const mine=taskAt(i-1),mPassed=g.pos>=i;
-    const mHex=(mPassed||!hiddenColors())?gateHex(mine):WOOD;
-    gates+=`<rect x="${x-5}" y="${yMe-16}" width="10" height="28" rx="2" fill="${mHex}" stroke="#111" stroke-width="2.5" opacity="${mPassed?.55:1}"/>`;
-    if(mPassed)gates+=`<text x="${x}" y="${yMe+3}" text-anchor="middle" font-size="9" fill="#111">✓</text>`;
-    // Gegner-Spur: geschaffte Tore in ihrer Farbe
-    const oPassed=op>=i,oHex=oPassed?(oppTrailHex(i-1)||'#bbb'):WOOD;
-    gates+=`<rect x="${x-5}" y="${yOp-16}" width="10" height="28" rx="2" fill="${oHex}" stroke="#111" stroke-width="2.5" opacity="${oPassed?.55:1}"/>`;
-    if(i%g.ms===0)gates+=`<g transform="translate(${x},62)"><polygon points="${STAR}" transform="translate(-9,-10) scale(.18)" fill="#FFD21F" stroke="#111" stroke-width="8"/><text y="12" text-anchor="middle" font-family="Bangers" font-size="10">${i}</text></g>`;
-  }
-  const fx=p=>x0+Math.max(-0.4,p-start)*dx;
-  const label=(t,y)=>`<text x="4" y="${y+5}" font-family="Bangers" font-size="13" fill="#111">${t}</text>`;
-  const oname=g.oppReal?(other==='papa'?'OPI':'THILO'):'ROBO';
-  el.innerHTML=`<svg viewBox="0 0 400 120">
-    <rect x="${x0-14}" y="${yMe+12}" width="${x1-x0+20}" height="6" fill="#5cc35c" stroke="#111" stroke-width="2"/>
-    <rect x="${x0-14}" y="${yOp+12}" width="${x1-x0+20}" height="6" fill="#5cc35c" stroke="#111" stroke-width="2"/>
-    ${label('DU',yMe)}${label(oname,yOp)}
-    ${gates}
-    <text x="392" y="66" text-anchor="end" font-family="Bangers" font-size="22" fill="#111">∞</text>
-    <g class="fig" style="transform:translate(${fx(g.pos)}px,${yMe}px)"><g transform="scale(.75)">${heroG(me)}</g></g>
-    <g class="fig" style="transform:translate(${fx(op)}px,${yOp}px)"><g transform="scale(.75)">${heroG(other)}</g></g>
-  </svg><div class="center bang" style="font-size:20px">⭐ DU: ${g.pos} &nbsp;·&nbsp; ${oname}: ${op}</div>`;
-}
-function bubbleHTML(){
-  const g=S.g,t=g.task;
-  if(S.role==='kid'){
-    if(g.cfg.stufe===2)return `<div class="bubble big">Hör gut zu! <button class="speak" data-act="speak" aria-label="Nochmal hören">🔊</button></div>`;
-    if(g.cfg.stufe===3)return `<div class="bubble">Wie heißt das?</div>`;
-    return `<div class="bubble">${escapeHtml(t.name)}! <button class="speak" data-act="speak" aria-label="Nochmal hören">🔊</button></div>`;
-  }
-  return `<div class="bubble" style="color:${t.ink}">${escapeHtml(t.name)}</div>`;
-}
-function signHTML(){
-  const g=S.g,t=g.task;
-  const showPic=S.role==='kid'?g.cfg.stufe!==2:g.cfg.papaLevel==='leicht';
-  return showPic?`<div class="sign">${itemSVG(t.target)}</div>`:`<div class="sign q">?</div>`;
-}
-function doorStyle(){const g=S.g;return hiddenColors()?'':`background-color:${gateHex(g.task)};background-image:repeating-linear-gradient(90deg,transparent 0 22%,rgba(0,0,0,.28) 22% 24%)`}
-function renderStage(){
-  const el=$('#stage');if(!el)return;
-  el.innerHTML=`<div class="panel" style="padding:10px">${bubbleHTML()}
-   <div class="scene t${Math.floor(S.g.pos/S.g.ms)%4}"><div class="wall"></div><div class="ground"></div>
-     <div class="doorway"><div class="sky"></div><div class="door" id="door" style="${doorStyle()}">${signHTML()}</div></div>
-     <div class="herobig" id="herobig">${heroSVG(S.role)}</div>
-     <div class="burst" id="burst">${burstSVG()}<span>ZACK!</span></div>
-   </div></div>`;
-}
-function renderStageBanana(){
-  const el=$('#stage');if(!el)return;
-  el.innerHTML=`<div class="panel" style="padding:10px"><div class="bubble">Uiii …</div><div class="scene t${Math.floor(S.g.pos/S.g.ms)%4}"><div class="wall"></div><div class="ground"></div>
-   <div class="banana"><div class="em">🍌</div>Opi rutscht auf einer<br>Bananenschale aus!</div></div></div>`;
-  const o=$('#opts');if(o)o.innerHTML='';
-}
-function renderOpts(){
-  const el=$('#opts');if(!el)return;const g=S.g,t=g.task;
-  if(S.role==='kid'&&g.cfg.stufe===3){
-    const papaHere=!!opp();
-    el.innerHTML=`<div class="panel say">${papaHere
-      ?`<div class="bang center" style="font-size:30px">Sag es laut! 👂 Opi hört zu.</div><button class="btn" data-act="tip">🔊 Tipp hören</button>`
-      :`<div class="hint">Thilo sagt das Wort (oder gebärdet es). Ein Erwachsener bestätigt:</div>
-        <button class="btn green" style="font-size:34px" data-act="solook">👍 Richtig gesagt!</button>
-        <button class="btn" data-act="tip">🔊 Lösung vorsprechen</button>`}</div>`;
-    return;
-  }
-  const n=t.opts.length;
-  el.innerHTML=`<div class="opts ${S.role==='kid'?'kid':''} ${(n===3||n>4)?'c3':'c2'}">${t.opts.map((o,i)=>`<div class="opt" data-act="pick" data-i="${i}" role="button" aria-label="Auswahl ${i+1}">${itemSVG(o)}</div>`).join('')}</div>`;
-}
-function renderResults(){
-  const g=S.g;const st=$('#stage'),op=$('#opts');if(!st)return;
-  const o=oppPos(),mine=g.pos;
-  const oname=S.role==='kid'?(g.oppReal?'Opi':'Robo'):(g.oppReal?'Thilo':'Robo');
-  const meName=S.role==='kid'?'Du':'Opi';
-  const card=(name,n,gold,lab)=>`<div>${trophySVG(gold,lab)}<div class="bang">${escapeHtml(name)}</div><div class="bang" style="font-size:30px">${n} Tore</div></div>`;
-  const tie=mine===o;
-  st.innerHTML=`<div class="panel center"><h1 class="title" style="font-size:46px">SUPER GELAUFEN!</h1>
-   <div class="trophies" style="margin-top:10px">
-     ${card(meName,mine,tie||mine>o,tie||mine>o?'1':'★')}
-     ${card(oname,o,tie||o>mine,tie||o>mine?'1':'★')}
-   </div></div>`;
-  op.innerHTML=`<div class="row"><button class="btn go grow" style="font-size:34px" data-act="again">NOCHMAL!</button><button class="btn" data-act="quit">Menü</button></div>`;
-  sfx('win');
-  if(S.role==='kid')setTimeout(()=>say('Super gelaufen! Du hast '+mine+' Tore geschafft!'),600);
-}
-function quit(){const g=S.g;if(g&&g.bot.t)clearTimeout(g.bot.t);S.g=null;pres({gid:null,ask:null,fin:false});closeLayer();S.screen='lobby';render()}
-
-/* ---------- Ereignisse ---------- */
-document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-act]');if(!t)return;ac();
-  const a=t.dataset.act,v=t.dataset.v;
-  switch(a){
-    case 'role':S.role=v;store('role',v);joinRoom();S.screen='lobby';render();if(S.room)pres({role:v,cfg:v==='papa'?S.cfg:null});break;
-    case 'back':S.screen='role';render();break;
-    case 'sound':S.local.sound=!S.local.sound;store('local',S.local);render();break;
-    case 'start':requestStart();break;
-    case 'cfg':setCfg(t.dataset.k,v);break;
-    case 'tog':toggleCfg(t.dataset.k,v);break;
-    case 'kidset':openKidSettings();break;
-    case 'closeset':closeLayer();break;
-    case 'pick':pick(+t.dataset.i,t);break;
-    case 'speak':if(S.g&&S.g.task)say(S.g.task.speak);break;
-    case 'tip':if(S.g&&S.g.task)say(S.g.task.answer);break;
-    case 'solook':confirmSolo(true);break;
-    case 'askok':answerAsk(true);break;
-    case 'askno':answerAsk(false);break;
-    case 'again':requestStart();break;
-    case 'quit':quit();break;
-    case 'stop':if(S.g&&!S.g.ended)endRound(false);else quit();break;
-  }
-});
-document.addEventListener('toggle',e=>{if(e.target.id==='setbox')store('openset',e.target.open)},true);
-
-S.screen=S.role?'lobby':'role';
-render();
-if(S.role)joinRoom();
+document.getElementById('kid').innerHTML=heroG('kid');
+document.getElementById('opi').innerHTML=heroG('papa');
+document.getElementById('kidRun').innerHTML=heroG('kid');
 </script>
 </body>
 </html>
