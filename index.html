@@ -2,120 +2,117 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Katapult-Duell – Thilo gegen Opi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thilo &amp; Opi – Spiele</title>
+<meta name="theme-color" content="#ffe066">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Thilo &amp; Opi">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<script src="https://unpkg.com/mqtt@5.16.1/dist/mqtt.min.js"></script>
-<script>if (typeof mqtt === "undefined") document.write('<script src="https://cdn.jsdelivr.net/npm/mqtt@5.16.1/dist/mqtt.min.js"><\/script>');</script>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#111;--paper:#fffdf4;--yel:#FFD21F;--red:#E8312F;--blue:#2F7DE1;--green:#2DB34A}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
 body{font-family:'Comic Neue',system-ui,sans-serif;font-weight:700;color:var(--ink);
-  background:#ffe066;background-image:radial-gradient(rgba(0,0,0,.14) 1.3px,transparent 1.7px);background-size:12px 12px;
-  overflow-x:hidden;-webkit-user-select:none;user-select:none}
-#app{max-width:620px;margin:0 auto;min-height:100vh;padding:10px 12px;display:flex;flex-direction:column;gap:12px}
-.panel{background:var(--paper);border:4px solid var(--ink);border-radius:6px;box-shadow:6px 6px 0 var(--ink);padding:14px;position:relative}
-.bang,h1,h2{font-family:'Bangers',cursive;font-weight:400;letter-spacing:1.5px;margin:0}
-.title{font-size:46px;line-height:1;color:var(--red);-webkit-text-stroke:1.5px var(--ink);text-shadow:3px 3px 0 var(--ink);text-align:center;transform:rotate(-2deg);margin-top:6px}
-.subtitle{font-family:'Bangers';font-size:22px;letter-spacing:1px;background:var(--blue);color:#fff;border:3px solid var(--ink);display:inline-block;padding:2px 12px;transform:rotate(1.5deg);box-shadow:3px 3px 0 var(--ink)}
-.center{text-align:center}
-.btn{font-family:'Bangers',cursive;font-size:26px;letter-spacing:1px;border:4px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);background:#fff;padding:10px 18px;cursor:pointer;color:var(--ink);touch-action:manipulation}
-.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.btn.go{background:var(--red);color:#fff;text-shadow:2px 2px 0 var(--ink);font-size:44px;width:100%;padding:14px}
-.btn.small{font-size:20px;padding:6px 12px;border-width:3px;box-shadow:3px 3px 0 var(--ink)}
-.btn.green{background:var(--green);color:#fff;text-shadow:2px 2px 0 var(--ink)}
-.btn.fire{background:var(--red);color:#fff;text-shadow:3px 3px 0 var(--ink);font-size:52px;width:100%;padding:12px;animation:pulse 1s infinite}
-.row{display:flex;gap:12px;align-items:center}
-.grow{flex:1}
-.roles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.rolecard{border:4px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);padding:14px 8px;text-align:center;cursor:pointer;background:#fff}
-.rolecard:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
-.rolecard svg{width:100%;height:110px}
-.rolecard .bang{font-size:30px}
-.rolecard.kid{background:#ffd9d6}.rolecard.papa{background:#d6e6ff}
-.status{font-size:17px;margin-top:8px}
-.pill{display:inline-block;border:3px solid var(--ink);border-radius:20px;padding:2px 10px;background:#fff;margin:3px 4px 0 0}
-.pill.ok{background:#c9f5d2}.pill.noconn{background:#ffe1e1}
-.set{margin:10px 0}
-.set label.lbl{display:block;font-size:16px;margin-bottom:4px}
-.seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{font-family:'Comic Neue';font-weight:700;font-size:16px;border:3px solid var(--ink);border-radius:9px;background:#fff;padding:6px 10px;cursor:pointer;color:var(--ink)}
-.seg button.on{background:var(--yel);box-shadow:inset 0 -4px 0 rgba(0,0,0,.18)}
-.seg button.sw{width:40px;height:40px;padding:0}
-.seg button.sw.on{outline:4px solid var(--ink);outline-offset:2px}
-details summary{font-family:'Bangers';font-size:24px;letter-spacing:1px;cursor:pointer;list-style:none}
-details summary::-webkit-details-marker{display:none}
-.muted{opacity:.7;font-size:15px}
-.topbar{display:flex;justify-content:space-between;align-items:center}
-.topbar .bang{font-size:24px}
-/* Spielfeld */
-.field{padding:6px}
-#cv{width:100%;display:block;border:3px solid var(--ink);touch-action:none;background:#8fd3ff}
-.score{display:flex;justify-content:space-between;font-family:'Bangers';font-size:20px;letter-spacing:1px;padding:4px 4px 0}
-/* Steuerung */
-.bubble{position:relative;background:#fff;border:4px solid var(--ink);border-radius:22px;padding:4px 14px;text-align:center;font-family:'Bangers';font-size:34px;letter-spacing:1px;margin:0 6px 14px;min-height:56px;display:flex;align-items:center;justify-content:center;gap:10px}
-.bubble:after{content:"";position:absolute;left:38px;bottom:-20px;border:10px solid transparent;border-top:14px solid var(--ink)}
-.bubble:before{content:"";position:absolute;left:42px;bottom:-12px;border:6px solid transparent;border-top:10px solid #fff;z-index:1}
-.bubble .speak{font-size:30px;border:3px solid var(--ink);border-radius:50%;width:54px;height:54px;background:var(--yel);cursor:pointer;flex:none}
-.bubble.big .speak{width:90px;height:90px;font-size:48px}
-.swatch{display:inline-block;width:38px;height:38px;border-radius:50%;border:4px solid var(--ink);vertical-align:middle}
-.ammo{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding:4px}
-.ball{width:clamp(70px,22vw,110px);aspect-ratio:1;border-radius:50%;border:5px solid var(--ink);box-shadow:4px 4px 0 var(--ink);cursor:pointer;position:relative;transition:opacity .4s}
-.ball:after{content:"";position:absolute;left:20%;top:16%;width:28%;height:18%;border-radius:50%;background:rgba(255,255,255,.7);transform:rotate(-30deg)}
-.ammo.small .ball{width:clamp(48px,13vw,70px);border-width:4px}
-.ball:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.ball.shp{border:none;box-shadow:none;background:none;padding:4%}
-.ball.shp:after{display:none}
-.ball.shp svg{width:100%;height:100%;filter:drop-shadow(3px 3px 0 #111)}
-.ball.gone{opacity:.12;pointer-events:none;box-shadow:none}
-.ball.sel{outline:5px solid var(--ink);outline-offset:4px;transform:scale(1.08)}
-.ball.shake{animation:shake .45s}
-.ball.hint{animation:pulse 1s infinite}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px) rotate(-6deg)}40%{transform:translateX(10px) rotate(6deg)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06);box-shadow:0 0 0 8px rgba(255,210,31,.9),4px 4px 0 var(--ink)}}
-.hint{font-size:19px;text-align:center}
-.wait{display:flex;align-items:center;gap:14px;justify-content:center}
-.wait svg{width:80px}
-.wait .bang{font-size:30px}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
-.overlay .panel{max-width:460px;width:100%;transform:rotate(-1deg)}
-.count{font-family:'Bangers';font-size:150px;color:var(--yel);-webkit-text-stroke:4px var(--ink);text-shadow:8px 8px 0 var(--ink);animation:cnt 1s ease-out}
-@keyframes cnt{from{transform:scale(2.2) rotate(-10deg);opacity:0}to{transform:scale(1);opacity:1}}
-.trophies{display:flex;justify-content:space-around;gap:10px;text-align:center}
-.trophies svg{width:120px;height:140px}
-.trophies .bang{font-size:26px}
+  background:#ffe066;background-image:radial-gradient(rgba(0,0,0,.14) 1.3px,transparent 1.7px);background-size:12px 12px}
+main{max-width:620px;margin:0 auto;padding:18px 14px 40px;display:flex;flex-direction:column;gap:22px}
+.bang{font-family:'Bangers',cursive;font-weight:400;letter-spacing:1.5px}
+.title{font-family:'Bangers',cursive;font-size:56px;line-height:1;margin:6px 0 0;color:var(--red);-webkit-text-stroke:1.5px var(--ink);text-shadow:4px 4px 0 var(--ink);text-align:center;transform:rotate(-2deg)}
+.subtitle{display:inline-block;font-family:'Bangers';font-size:24px;letter-spacing:1px;background:var(--blue);color:#fff;border:3px solid var(--ink);padding:2px 14px;transform:rotate(1.5deg);box-shadow:3px 3px 0 var(--ink)}
+.heroes{display:flex;justify-content:center;gap:10px;margin-top:6px}
+.heroes svg{width:96px;height:112px}
+.card{display:block;text-decoration:none;color:var(--ink);background:var(--paper);border:4px solid var(--ink);border-radius:8px;box-shadow:7px 7px 0 var(--ink);padding:16px;transition:transform .15s}
+.card:nth-of-type(1){transform:rotate(-1deg)}.card:nth-of-type(2){transform:rotate(1deg)}.card:nth-of-type(3){transform:rotate(-.6deg)}
+.card:hover,.card:focus-visible{transform:rotate(0) scale(1.02)}
+.card:active{transform:translate(4px,4px);box-shadow:3px 3px 0 var(--ink)}
+.card h2{font-family:'Bangers';font-weight:400;font-size:40px;letter-spacing:1.5px;margin:0 0 4px}
+.card p{margin:6px 0 12px;font-size:18px;line-height:1.35}
+.pic{border:3px solid var(--ink);border-radius:6px;overflow:hidden;background:#8fd3ff;margin-bottom:10px}
+.pic svg{display:block;width:100%;height:auto}
+.play{display:block;text-align:center;font-family:'Bangers';font-size:34px;letter-spacing:1px;color:#fff;text-shadow:2px 2px 0 var(--ink);border:4px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:8px}
+.c1 .play{background:#5b5fc7}.c2 .play{background:#c46bb0}.c3 .play{background:var(--red)}
+.tag{display:inline-block;font-size:15px;border:3px solid var(--ink);border-radius:20px;padding:2px 10px;background:#fff;margin:0 0 12px}
+.tips{background:#fff;border:4px solid var(--ink);border-radius:8px;box-shadow:5px 5px 0 var(--ink);padding:12px 16px;font-size:16px;line-height:1.45}
+.tips h3{font-family:'Bangers';font-weight:400;font-size:26px;letter-spacing:1px;margin:0 0 4px}
+.tips ol{margin:4px 0 0;padding-left:22px}
 </style>
 </head>
 <body>
-<div id="app"></div>
-<div id="layer"></div>
+<main>
+  <header style="text-align:center">
+    <h1 class="title">THILO &amp; OPI</h1>
+    <div style="margin-top:12px"><span class="subtitle">Farben &amp; Formen – unsere Spiele</span></div>
+    <div class="heroes" aria-hidden="true">
+      <svg viewBox="-28 -32 50 58"><g id="kid"></g></svg>
+      <svg viewBox="-28 -32 50 58" style="transform:scaleX(-1)"><g id="opi"></g></svg>
+    </div>
+  </header>
+
+  <a class="card c1" href="turm/">
+    <h2>🚀 Raketenturm</h2>
+    <div class="pic"><svg viewBox="0 0 320 110" aria-hidden="true">
+      <rect width="320" height="110" fill="#2d3283"/>
+      <g fill="#fff"><circle cx="30" cy="20" r="1.6"/><circle cx="80" cy="45" r="1.2"/><circle cx="250" cy="18" r="1.6"/><circle cx="290" cy="60" r="1.2"/><circle cx="60" cy="85" r="1.4"/><circle cx="270" cy="95" r="1.2"/></g>
+      <rect x="125" y="30" width="70" height="80" fill="#b9a7e0" stroke="#111" stroke-width="3"/>
+      <g stroke="#111" stroke-width="2.5"><path d="M125 92 L195 80" fill="none"/><path d="M125 70 L195 58" fill="none"/><path d="M125 48 L195 36" fill="none"/></g>
+      <rect x="140" y="72" width="14" height="14" rx="3" fill="#E8312F" stroke="#111" stroke-width="2"/>
+      <circle cx="176" cy="54" r="7" fill="#2DB34A" stroke="#111" stroke-width="2"/>
+      <path d="M160 2 Q172 14 170 26 L150 26 Q148 14 160 2Z" fill="#fff" stroke="#111" stroke-width="2.5"/><circle cx="160" cy="15" r="3.5" fill="#2F7DE1" stroke="#111" stroke-width="1.5"/>
+      <path d="M152 26 L156 32 L164 32 L168 26" fill="#FFD21F" stroke="#111" stroke-width="2"/>
+    </svg></div>
+    <p>Wettrennen auf zwei Handys: Thilo und Opi klettern gleichzeitig einen Turm hinauf. Weiter geht es nur mit der richtigen Farbe oder Form. Wer zuerst bei der Rakete ist, gewinnt.</p>
+    <div class="tag">👥 Zwei Handys · oder allein üben</div>
+    <span class="play">LOS GEHT'S! ▶</span>
+  </a>
+
+  <a class="card c2" href="boulder/">
+    <h2>💎 Glitzerstollen</h2>
+    <div class="pic"><svg viewBox="0 0 320 110" aria-hidden="true">
+      <rect width="320" height="110" fill="#d9c7a3"/>
+      <g fill="#c4ae86"><circle cx="40" cy="20" r="6"/><circle cx="270" cy="30" r="7"/><circle cx="200" cy="90" r="6"/><circle cx="90" cy="95" r="5"/></g>
+      <rect x="0" y="48" width="320" height="30" fill="#efe6f6" stroke="#111" stroke-width="2.5"/>
+      <circle cx="110" cy="38" r="10" fill="#9a948a" stroke="#111" stroke-width="2.5"/>
+      <polygon points="190,52 200,62 190,74 180,62" fill="#2F7DE1" stroke="#111" stroke-width="2.5"/>
+      <polygon points="240,52 250,62 240,74 230,62" fill="#E8312F" stroke="#111" stroke-width="2.5"/>
+      <rect x="282" y="54" width="26" height="20" rx="3" fill="#a0612d" stroke="#111" stroke-width="2.5"/><rect x="282" y="54" width="26" height="7" fill="#FFD21F" stroke="#111" stroke-width="2"/>
+      <ellipse cx="60" cy="66" rx="16" ry="12" fill="#ffb6d5" stroke="#111" stroke-width="2.5"/><circle cx="55" cy="63" r="2" fill="#111"/><circle cx="65" cy="63" r="2" fill="#111"/>
+    </svg></div>
+    <p>Wabbel gräbt sich durch eine Mine und sammelt Farb- und Formkristalle. Tore und Förderkörbe öffnen sich nur mit dem passenden Knopf. Ohne Zeitdruck, ohne Game Over.</p>
+    <div class="tag">🙂 Ein Handy · allein</div>
+    <span class="play">LOS GEHT'S! ▶</span>
+  </a>
+
+  <a class="card c3" href="katapult/">
+    <h2>🏰 Katapult-Duell</h2>
+    <div class="pic"><svg viewBox="0 0 320 110" aria-hidden="true">
+      <rect width="320" height="110" fill="#8fd3ff"/>
+      <path d="M100 90 Q160 30 220 90 Z" fill="#4fb04f" stroke="#111" stroke-width="3"/>
+      <rect y="88" width="320" height="22" fill="#5cc35c"/><line x1="0" y1="88" x2="320" y2="88" stroke="#111" stroke-width="3"/>
+      <g stroke="#111" stroke-width="2.5">
+        <rect x="10" y="64" width="22" height="22" rx="3" fill="#2F7DE1"/><rect x="34" y="64" width="22" height="22" rx="3" fill="#E8312F"/><rect x="10" y="40" width="22" height="22" rx="3" fill="#FFD21F"/>
+        <rect x="264" y="64" width="22" height="22" rx="3" fill="#2DB34A"/><rect x="288" y="64" width="22" height="22" rx="3" fill="#FFD21F"/><rect x="288" y="40" width="22" height="22" rx="3" fill="#E8312F"/>
+      </g>
+      <path d="M70 70 Q150 -10 240 40" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="4 6"/>
+      <circle cx="240" cy="40" r="8" fill="#E8312F" stroke="#111" stroke-width="2.5"/>
+      <g transform="translate(70,80)"><rect x="-14" y="0" width="28" height="7" rx="2" fill="#a0612d" stroke="#111" stroke-width="2"/><line x1="0" y1="0" x2="-14" y2="-14" stroke="#111" stroke-width="5" stroke-linecap="round"/><circle cx="-8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/><circle cx="8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/></g>
+      <g transform="translate(250,80) scale(-1,1)"><rect x="-14" y="0" width="28" height="7" rx="2" fill="#a0612d" stroke="#111" stroke-width="2"/><line x1="0" y1="0" x2="-14" y2="-14" stroke="#111" stroke-width="5" stroke-linecap="round"/><circle cx="-8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/><circle cx="8" cy="9" r="4" fill="#5a3a1a" stroke="#111" stroke-width="2"/></g>
+    </svg></div>
+    <p>Jeder hat eine Burg aus bunten Blöcken. Ein Block fällt nur, wenn die Kugel passt – erst die Farbe, dann die Form, am Ende beides. Für jede abgeräumte Burg gibt es einen Stern.</p>
+    <div class="tag">👥 Zwei Handys · oder gegen den Robo</div>
+    <span class="play">LOS GEHT'S! ▶</span>
+  </a>
+
+  <section class="tips">
+    <h3>So spielt ihr zu zweit</h3>
+    <ol>
+      <li>Beide Handys öffnen <b>dasselbe</b> Spiel – über diese Seite.</li>
+      <li>Ein Handy wählt <b>Thilo</b>, das andere <b>Opi</b>. Das merkt sich das Handy.</li>
+      <li>Die Handys finden sich von selbst, sobald beide online sind – dann geht's los.</li>
+    </ol>
+    <div style="margin-top:6px;opacity:.75">Tipp: Diese Seite über das Teilen-Menü <b>zum Home-Bildschirm hinzufügen</b> – dann startet sie wie eine App.</div>
+  </section>
+</main>
 <script>
-"use strict";
-/* ---------- Daten ---------- */
-const COLORS=[
- {id:'rot',name:'Rot',hex:'#E8312F',n:'rote',m:'roten',nm:'roter',nn:'rotes'},
- {id:'gelb',name:'Gelb',hex:'#FFD21F',n:'gelbe',m:'gelben',nm:'gelber',nn:'gelbes'},
- {id:'blau',name:'Blau',hex:'#2F7DE1',n:'blaue',m:'blauen',nm:'blauer',nn:'blaues'},
- {id:'gruen',name:'Grün',hex:'#2DB34A',n:'grüne',m:'grünen',nm:'grüner',nn:'grünes'},
- {id:'orange',name:'Orange',hex:'#FF8A1F',n:'orange',m:'orangen',nm:'oranger',nn:'oranges'},
- {id:'lila',name:'Lila',hex:'#9B4DCA',n:'lila',m:'lila',nm:'lila',nn:'lila'}
-];
-const CBY=id=>COLORS.find(c=>c.id===id)||COLORS[0];
-const PRAISE=['Super!','Toll!','Klasse!','Prima!','Ja, genau!','Spitze!'];
-const DEFAULT_CFG={stufe:1,levels:5,papaLevel:'mittel',blocks:6,bot:'manchmal'};
-
-
-/* ---------- Hilfen ---------- */
-const $=s=>document.querySelector(s);
-const rnd=a=>a[Math.floor(Math.random()*a.length)];
-const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const uid=()=>Math.random().toString(36).slice(2,9);
-function store(k,v){try{if(v===undefined){const x=localStorage.getItem('kd_'+k);return x?JSON.parse(x):null}localStorage.setItem('kd_'+k,JSON.stringify(v))}catch(e){return null}}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-
-/* ---------- Figuren ---------- */
 function heroG(role){
   const kid=role==='kid';
   const cape=kid?'#E8312F':'#2F7DE1',suit=kid?'#FFD21F':'#7fd3ff',skin=kid?'#FFD3A8':'#F6C9A4';
@@ -136,692 +133,9 @@ function heroG(role){
      <path d="M3 -2.6 Q-1 -4.5 -2.5 -1.2 Q0.5 0.3 3 -1.2 Q5.5 0.3 8.5 -1.2 Q7 -4.5 3 -2.6 Z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/><path d="M1.5 1 Q3 2.5 4.5 1" fill="none" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>`}
   return g;
 }
-function heroSVG(role){return `<svg viewBox="-28 -32 50 58" aria-hidden="true"><g>${heroG(role)}</g></svg>`}
-const HERO_IMG={};
-['kid','papa'].forEach(r=>{const im=new Image();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-28 -32 50 58">${heroG(r)}</svg>`);HERO_IMG[r]=im});
-function trophySVG(gold,label){
-  const c=gold?'#FFD21F':'#7fd3ff',c2=gold?'#e0a800':'#3a9fd6';
-  return `<svg viewBox="0 0 120 140"><path d="M30 18 H90 V52 Q90 84 60 88 Q30 84 30 52Z" fill="${c}" stroke="#111" stroke-width="5"/>
-   <path d="M30 28 Q8 28 12 46 Q16 60 32 60" fill="none" stroke="#111" stroke-width="5"/><path d="M90 28 Q112 28 108 46 Q104 60 88 60" fill="none" stroke="#111" stroke-width="5"/>
-   <rect x="52" y="88" width="16" height="18" fill="${c2}" stroke="#111" stroke-width="5"/><rect x="34" y="106" width="52" height="20" rx="4" fill="${c2}" stroke="#111" stroke-width="5"/>
-   <text x="60" y="66" text-anchor="middle" font-family="Bangers" font-size="34" fill="#fff" stroke="#111" stroke-width="2">${label}</text></svg>`;
-}
-const KLECKS="M50 9C62 9 66 21 76 19C90 17 93 33 87 43C81 53 95 60 89 74C83 88 66 82 58 90C50 98 37 91 29 86C17 80 7 73 11 59C15 47 5 39 13 27C21 15 37 21 41 13C43 10 47 9 50 9Z";
-function starPts(cx,cy,ro,ri){let p=[];for(let i=0;i<10;i++){const r=i%2?ri:ro,a=(-90+i*36)*Math.PI/180;p.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}return p}
-function shapeSVG(id,hex){const st=`fill="${hex}" stroke="#111" stroke-width="6" stroke-linejoin="round"`;
-  const b={kreis:`<circle cx="50" cy="50" r="40" ${st}/>`,quadrat:`<rect x="12" y="12" width="76" height="76" rx="5" ${st}/>`,dreieck:`<polygon points="50,8 93,88 7,88" ${st}/>`,
-    stern:`<polygon points="${starPts(50,54,44,19).map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" ${st}/>`,
-    herz:`<path d="M50 89C22 68 4 50 13 29C21 11 43 13 50 30C57 13 79 11 87 29C96 50 78 68 50 89Z" ${st}/>`}[id];
-  return `<svg viewBox="0 0 100 100">${b}</svg>`}
-function itemSVG(it){return it.s?shapeSVG(it.s.id,it.c?it.c.hex:'#c9c3b8'):`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="${it.c.hex}" stroke="#111" stroke-width="6"/><ellipse cx="36" cy="34" rx="12" ry="7" fill="#fff" opacity=".7" transform="rotate(-30 36 34)"/></svg>`}
-const klecksSVG=hex=>`<svg viewBox="0 0 100 100"><path d="${KLECKS}" fill="${hex}" stroke="#111" stroke-width="6"/></svg>`;
+document.getElementById('kid').innerHTML=heroG('kid');
+document.getElementById('opi').innerHTML=heroG('papa');
 
-/* ---------- Ton & Stimme ---------- */
-let AC=null;
-function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}return AC}
-function tone(f,t0,d,type,vol){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type||'square';o.frequency.setValueAtTime(f,a.currentTime+t0);
-  g.gain.setValueAtTime(0,a.currentTime+t0);g.gain.linearRampToValueAtTime(vol||.12,a.currentTime+t0+.01);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
-  o.connect(g).connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.05)}
-function noise(d,vol,fFrom,fTo){const a=ac();if(!a)return;const n=a.sampleRate*d,b=a.createBuffer(1,n,a.sampleRate),ch=b.getChannelData(0);for(let i=0;i<n;i++)ch[i]=(Math.random()*2-1)*(1-i/n);
-  const s=a.createBufferSource();s.buffer=b;const f=a.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(fFrom,a.currentTime);f.frequency.exponentialRampToValueAtTime(fTo,a.currentTime+d);
-  const g=a.createGain();g.gain.value=vol;s.connect(f).connect(g).connect(a.destination);s.start()}
-function sfx(k){if(!S.local.sound)return;
-  if(k==='ok'){[523,659,784,1046].forEach((f,i)=>tone(f,i*.08,.18,'square',.09))}
-  else if(k==='no'){tone(220,0,.18,'triangle',.18);tone(180,.15,.25,'triangle',.18)}
-  else if(k==='tick'){tone(660,0,.12,'square',.08)}
-  else if(k==='go'){tone(880,0,.35,'square',.1)}
-  else if(k==='launch'){noise(.35,.25,2500,300);tone(300,0,.25,'sawtooth',.05)}
-  else if(k==='boom'){noise(.6,.5,1800,80);tone(90,0,.4,'sine',.3)}
-  else if(k==='boing'){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.setValueAtTime(180,a.currentTime);o.frequency.exponentialRampToValueAtTime(600,a.currentTime+.12);o.frequency.exponentialRampToValueAtTime(220,a.currentTime+.4);g.gain.setValueAtTime(.25,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.45);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+.5)}
-  else if(k==='plopp'){noise(.2,.3,600,100)}
-  else if(k==='win'){[523,523,523,659,784,659,784,1046].forEach((f,i)=>tone(f,i*.13,.22,'square',.09))}
-}
-let deVoice=null;
-function pickVoice(){try{const v=speechSynthesis.getVoices().filter(x=>/^de/i.test(x.lang));const sc=x=>(/premium|enhanced|neural|natural|online/i.test(x.name)?10:0)+(/google/i.test(x.name)?6:0)+(/anna|petra|helena|katja|marlene|vicki/i.test(x.name)?4:0)+(/de-DE/i.test(x.lang)?2:0);v.sort((a,b)=>sc(b)-sc(a));deVoice=v[0]||null}catch(e){}}
-if(window.speechSynthesis){pickVoice();try{speechSynthesis.onvoiceschanged=pickVoice}catch(e){}}
-/* Sprache nacheinander: nie zwei Sätze gleichzeitig; wartet ein neuer Satz, ersetzt er den älteren wartenden */
-const SPEECH={busy:false,next:null,timer:null,gen:0};
-function say(text){
-  if(!S.local.sound||S.role!=='kid'||!window.speechSynthesis)return;
-  SPEECH.next=text;if(!SPEECH.busy)speakNext();
-}
-function speakNext(){
-  const t=SPEECH.next;SPEECH.next=null;
-  if(!t){SPEECH.busy=false;return}
-  SPEECH.busy=true;const gen=++SPEECH.gen;
-  try{
-    const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';if(deVoice)u.voice=deVoice;u.rate=.95;u.pitch=1;
-    let done=false;const fin=()=>{if(done||gen!==SPEECH.gen)return;done=true;clearTimeout(SPEECH.timer);setTimeout(speakNext,250)};
-    u.onend=fin;u.onerror=fin;SPEECH.timer=setTimeout(fin,2500+t.length*110);
-    speechSynthesis.speak(u);
-  }catch(e){SPEECH.busy=false}
-}
-function hush(){SPEECH.next=null;SPEECH.gen++;SPEECH.busy=false;clearTimeout(SPEECH.timer);try{speechSynthesis.cancel()}catch(e){}}
-
-/* ---------- Zustand ---------- */
-const S={screen:'role',role:store('role'),cfg:Object.assign({},DEFAULT_CFG,store('cfg')||{}),local:Object.assign({sound:true},store('local')||{}),
-  seen:new Set(),ready:false,g:null,answered:new Set(),anim:null,joining:false};
-
-/* ---------- Verbindung ---------- */
-/* ====== Verbindung: Nachrichtenserver (MQTT über sichere WebSockets) – wie beim Familienschach ======
-   Beide Handys verbinden sich mit ZWEI öffentlichen Nachrichtenservern gleichzeitig (falls einer ausfällt).
-   Nur ausgehende Verbindungen → klappt hinter jedem Router und im Mobilfunk. Alles wird verschlüsselt. */
-const SECRET='3f836f71ee2336790f5f4ea5';               // nicht ändern – sonst finden sich die Handys nicht
-const TOPIC='katapultduell/'+SECRET;
-const BROKERS=window.KD_BROKERS||[
-  {name:'EMQX',url:'wss://broker.emqx.io:8084/mqtt'},
-  {name:'HiveMQ',url:'wss://broker.hivemq.com:8884/mqtt'}
-];
-const rid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
-const NET={clients:[],gen:0,state:'off',myPres:{},oppPres:null,oppAt:0,sid:rid(),sq:0,last:{},pubT:null,errT:null,myRole:null};
-let keyP=null;
-function getKey(){if(!keyP)keyP=crypto.subtle.digest('SHA-256',new TextEncoder().encode('katapultduell-key-'+SECRET)).then(raw=>crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt','decrypt']));return keyP}
-const b64=u=>{let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
-const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-async function seal(o){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await getKey(),new TextEncoder().encode(JSON.stringify(o))));const out=new Uint8Array(12+ct.length);out.set(iv);out.set(ct,12);return b64(out)}
-async function unseal(str){const u=unb64(str);const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:u.slice(0,12)},await getKey(),u.slice(12));return JSON.parse(new TextDecoder().decode(pt))}
-
-const serverOk=()=>NET.clients.some(c=>c.ok);
-function netStatus(st){NET.state=st;if(S.screen==='lobby')renderLobbyStatus();if(S.screen==='game'&&S.g&&S.g.phase==='wait')renderCtl()}
-function pres(patch){for(const k in patch){if(patch[k]===null)delete NET.myPres[k];else NET.myPres[k]=patch[k]}
-  clearTimeout(NET.pubT);NET.pubT=setTimeout(()=>publishPres(),30)}
-async function publishPres(only){
-  if(!NET.myRole||!window.crypto||!crypto.subtle)return;
-  const payload=await seal(Object.assign({},NET.myPres,{on:true,sid:NET.sid,sq:++NET.sq}));
-  (only?[only]:NET.clients).forEach(c=>{if(c.ok){try{c.c.publish(TOPIC+'/p/'+NET.myRole,payload,{qos:1,retain:true})}catch(e){}}});
-}
-function connected(){return !!opp()}
-function opp(){
-  const p=NET.oppPres;if(!p||!p.on)return null;
-  const want=S.role==='kid'?'papa':'kid';if(p.role!==want)return null;
-  return {presence:p,updatedAt:NET.oppAt};
-}
-function others(){const o=opp();return o?[o]:[]}
-function onMsg(raw){
-  unseal(raw).then(d=>{
-    if(!d||typeof d!=='object'||Array.isArray(d))return;
-    if(d.on){
-      // kommt über zwei Server doppelt → nur Neueres übernehmen
-      const L=NET.last;if(L.sid===d.sid&&!(+d.sq>L.sq))return;
-      NET.last={sid:d.sid,sq:+d.sq||0};NET.oppPres=d;NET.oppAt=Date.now();
-    }else{if(NET.oppPres&&d.sid&&NET.oppPres.sid&&d.sid!==NET.oppPres.sid)return;NET.oppPres=null}
-    onPeers();
-  }).catch(()=>{});
-}
-async function startNet(){
-  stopNet();
-  NET.myRole=S.role;
-  NET.myPres=Object.assign(NET.myPres,{role:S.role,cfg:S.role==='papa'?S.cfg:null});
-  if(typeof mqtt==='undefined'){netStatus('nolib');return}
-  if(!window.crypto||!crypto.subtle){netStatus('nohttps');return}
-  const gen=++NET.gen;netStatus('wait');
-  S.ready=false;
-  setTimeout(()=>{if(gen!==NET.gen)return;const st=NET.oppPres&&NET.oppPres.start;if(st&&st.gid)S.seen.add(st.gid);S.ready=true},2500);
-  const role=S.role,other=role==='kid'?'papa':'kid';
-  const will=await seal({on:false,role,sid:NET.sid});
-  if(gen!==NET.gen)return;
-  BROKERS.forEach(b=>{
-    const st={name:b.name,ok:false,c:null,gen,will,role};
-    st.c=mqtt.connect(b.url,{clientId:'kd-'+role+'-'+rid(),clean:true,keepalive:20,reconnectPeriod:4000,connectTimeout:12000,protocolVersion:4,
-      will:{topic:TOPIC+'/p/'+role,payload:will,qos:1,retain:true}});
-    st.c.on('connect',()=>{if(st.gen!==NET.gen)return;st.ok=true;st.c.subscribe([TOPIC+'/p/'+other],{qos:1});publishPres(st);netStatus('ok')});
-    const down=()=>{if(st.gen!==NET.gen)return;st.ok=false;if(!serverOk())netStatus('wait')};
-    st.c.on('close',down);st.c.on('offline',down);st.c.on('error',()=>{});
-    st.c.on('message',(t,payload)=>{if(st.gen===NET.gen)onMsg(payload.toString())});
-    NET.clients.push(st);
-  });
-  clearTimeout(NET.errT);NET.errT=setTimeout(()=>{if(gen===NET.gen&&!serverOk())netStatus('neterr')},12500);
-}
-function stopNet(){
-  NET.gen++;const old=NET.clients;NET.clients=[];NET.oppPres=null;NET.last={};
-  old.forEach(s=>{try{if(s.ok&&s.will)s.c.publish(TOPIC+'/p/'+s.role,s.will,{qos:0,retain:true})}catch(e){}try{s.c.end(false)}catch(e){}});
-}
-function destroyPeer(){stopNet();NET.myRole=null}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;
-  NET.clients.forEach(s=>{if(!s.c.connected&&!s.c.reconnecting){try{s.c.reconnect()}catch(e){}}})});
-window.addEventListener('pagehide',()=>{NET.clients.forEach(s=>{try{if(s.ok&&s.will)s.c.publish(TOPIC+'/p/'+s.role,s.will,{qos:0,retain:true})}catch(e){}})});
-function onPeers(){
-  others().forEach(p=>{const st=p.presence.start;if(st&&typeof st.gid==='string'&&!S.seen.has(st.gid)){S.seen.add(st.gid);if(S.ready)startGame(st.gid)}});
-  if(S.screen==='lobby')renderLobbyStatus();
-  if(S.screen==='game'&&S.g){syncOpp();checkAsk();checkOk()}
-}
-
-/* ---------- Spielwelt ---------- */
-const W=320,H=190,GROUND=170,HX=160,HW=52,HH=34,GR=230,BR=6,B=18,REST=-160,FIRED=-55;
-function dims(n){return n===4?{C:2,R:2}:n===9?{C:3,R:3}:{C:2,R:3}}
-function hillY(x){const d=(x-HX)/HW;return Math.abs(d)<1?GROUND-HH*(1-d*d):GROUND}
-const mySide=()=>S.role,oppSide=()=>S.role==='kid'?'papa':'kid';
-function pivot(side){const g=S.g;const xl=6+g.dim.C*20+18;return {x:side==='kid'?xl:W-xl,y:GROUND-12}}
-function armEnd(side,deg){const p=pivot(side),a=deg*Math.PI/180;return {x:p.x+(side==='kid'?1:-1)*24*Math.cos(a),y:p.y+24*Math.sin(a)}}
-function blockRects(side){
-  const g=S.g;const cols=g.castle[side];if(!cols)return [];
-  const out=[];const {C,R}=g.dim;
-  for(let c=0;c<C;c++){let k=0,last=null;
-    for(let r=0;r<R;r++){const idx=c*R+r;if(g.dead[side].has(idx))continue;
-      const xl=6+c*20,x=side==='kid'?xl:W-xl-B,y=GROUND-(k+1)*B;
-      last={idx,x,y,w:B,h:B,color:cols[idx],col:c,top:false};out.push(last);k++}
-    if(last)last.top=true}
-  return out;
-}
-function simulate(L,vx,vy,rects){
-  let x=L.x,y=L.y;const dt=1/120,pts=[[x,y]];
-  for(let i=0;i<1500;i++){
-    vy+=GR*dt;x+=vx*dt;y+=vy*dt;if(i%2===1)pts.push([x,y]);
-    for(const b of rects){if(x+BR>b.x&&x-BR<b.x+b.w&&y+BR>b.y&&y-BR<b.y+b.h){pts.push([x,y]);return {pts,type:'block',rect:b}}}
-    if(y+BR>=hillY(x)&&Math.abs(x-HX)<HW){pts.push([x,y]);return {pts,type:'hill'}}
-    if(y+BR>=GROUND){pts.push([x,y]);return {pts,type:'ground'}}
-    if(x<-30||x>W+30||y>H+40)return {pts,type:'out'};
-  }
-  return {pts,type:'out'};
-}
-function autoVel(side,tx,ty,T){const L=armEnd(side,FIRED);return {vx:(tx-L.x)/T,vy:(ty-L.y-0.5*GR*T*T)/T}}
-
-/* ---------- Level & Gegenstände ---------- */
-const SHAPES=[{id:'kreis',name:'Kreis',g:'m'},{id:'quadrat',name:'Quadrat',g:'n'},{id:'dreieck',name:'Dreieck',g:'n'},{id:'stern',name:'Stern',g:'m'},{id:'herz',name:'Herz',g:'n'}];
-const SBY=id=>SHAPES.find(s=>s.id===id)||null;
-const STONE='#c9c3b8';
-const LEVEL_PLAN=[
- {mode:'farbe',nc:3,kidN:2,label:'3 Farben'},
- {mode:'farbe',nc:4,kidN:3,label:'4 Farben'},
- {mode:'form',ns:3,kidN:3,label:'Formen'},
- {mode:'farbe',nc:6,kidN:4,label:'6 Farben'},
- {mode:'combo',nc:4,ns:3,kidN:4,label:'Farbe und Form'}
-];
-const planOf=l=>LEVEL_PLAN[Math.min(l,LEVEL_PLAN.length-1)];
-function mkItem(cid,sid){const c=cid?CBY(cid):null,s=sid?SBY(sid):null;return {c,s,key:(c?c.id:'')+'|'+(s?s.id:'')}}
-function itemFromKey(k){if(typeof k!=='string'||k.length>20)return null;const [a,b]=k.split('|');
-  if(a&&!COLORS.some(c=>c.id===a))return null;if(b&&!SHAPES.some(s=>s.id===b))return null;if(!a&&!b)return null;return mkItem(a||null,b||null)}
-const itemHex=it=>it.c?it.c.hex:STONE;
-function itemName(it){
-  if(it.c&&it.s){const nom=it.s.g==='m'?it.c.nm:it.c.nn;return nom.charAt(0).toUpperCase()+nom.slice(1)+' '+it.s.name}
-  return it.c?it.c.name:it.s.name}
-function itemTake(it){ // "Nimm …"
-  if(it.c&&it.s)return it.s.g==='m'?`den ${it.c.m} ${it.s.name}`:`das ${it.c.n} ${it.s.name}`;
-  if(it.c)return `die ${it.c.n} Kugel`;
-  return (it.s.g==='m'?'den ':'das ')+it.s.name}
-function levelPool(l){const p=planOf(l);
-  const cols=p.nc?COLORS.slice(0,p.nc).map(c=>c.id):[null],shp=p.ns?SHAPES.slice(0,p.ns).map(s=>s.id):[null];
-  const all=[];cols.forEach(c=>shp.forEach(s=>all.push(mkItem(c,s))));return all}
-function makeCastle(l,n){const pool=levelPool(l).map(i=>i.key);let out=[];while(out.length<n)out=out.concat(shuffle(pool));return shuffle(out.slice(0,n))}
-function ammoFor(target,n,l){const pool=levelPool(l).filter(i=>i.key!==target.key);
-  // ähnliche zuerst (gleiche Farbe oder Form), damit Farbe+Form wirklich geprüft wird
-  const sim=shuffle(pool.filter(i=>(target.c&&i.c===target.c)||(target.s&&i.s===target.s)));
-  const rest=shuffle(pool.filter(i=>!sim.includes(i)));
-  const picked=(target.c&&target.s?[...sim.slice(0,2),...rest]:shuffle(pool)).slice(0,Math.max(1,n-1));
-  return shuffle([target,...picked])}
-
-/* ---------- Spielstart ---------- */
-function requestStart(){const gid=uid();S.seen.add(gid);pres({start:{gid}});startGame(gid)}
-function startGame(gid){
-  ac();closeLayer();
-  let cfg=S.cfg;const o=opp();
-  if(S.role==='kid'&&o&&o.presence.cfg&&typeof o.presence.cfg==='object')cfg=Object.assign({},DEFAULT_CFG,o.presence.cfg);
-  const n=[4,6,9].includes(cfg.blocks)?cfg.blocks:6;
-  const LV=[3,4,5].includes(cfg.levels)?cfg.levels:5;
-  const g=S.g={gid,cfg,n,LV,lvl:0,stars:{me:0,opp:0},dim:dims(n),oppReal:!!o,castle:{kid:null,papa:null},dead:{kid:new Set(),papa:new Set()},
-    myShots:0,myDone:0,oppDone:0,phase:'start',task:null,arm:{kid:REST,papa:REST},armT:{kid:0,papa:0},
-    fx:[],loaded:null,aim:null,drag:null,ended:false,botT:null,prevKey:null,wrongs:0,askN:0,askId:null};
-  g.castle[mySide()]=makeCastle(0,n);
-  if(!g.oppReal)g.castle[oppSide()]=makeCastle(0,n);
-  pres({gid,clvl:0,castle:g.castle[mySide()],shots:0,last:null,ask:null,ok:null});
-  S.anim=null;S.screen='game';render();
-  countdown(()=>{levelIntro(()=>{g.phase='idle';syncOpp();evalTurn()})});
-}
-function countdown(done){
-  let n=3;const L=$('#layer');
-  const step=()=>{if(n>0){L.innerHTML=`<div class="overlay"><div class="count">${n}</div></div>`;sfx('tick');n--;setTimeout(step,800)}
-    else{L.innerHTML=`<div class="overlay"><div class="count">LOS!</div></div>`;sfx('go');setTimeout(()=>{closeLayer();done()},650)}};
-  step();
-}
-function closeLayer(){$('#layer').innerHTML='';delete $('#layer').dataset.ask}
-function levelIntro(done){
-  const g=S.g;g.phase='level';renderCtl();
-  const p=planOf(g.lvl);
-  if(S.role==='kid')say('Level '+(g.lvl+1)+'. Jetzt: '+p.label+'!');
-  setTimeout(()=>{if(S.g===g&&!g.ended)done()},2800);
-}
-function levelDone(iWon){
-  const g=S.g;if(iWon)g.stars.me++;else g.stars.opp++;
-  sfx('win');
-  if(g.lvl+1>=g.LV){endGame();return}
-  g.phase='levelwon';g.lastWin=iWon;renderCtl();
-  if(S.role==='kid')say(iWon?'Juhu! Burg abgeräumt! Du bekommst einen Stern!':'Opi hat die Burg geschafft. Weiter gehts!');
-  setTimeout(()=>{
-    if(S.g!==g||g.ended)return;
-    g.lvl++;g.dead={kid:new Set(),papa:new Set()};g.prevKey=null;
-    g.castle[mySide()]=makeCastle(g.lvl,g.n);
-    g.castle[oppSide()]=g.oppReal?null:makeCastle(g.lvl,g.n);
-    pres({clvl:g.lvl,castle:g.castle[mySide()]});
-    levelIntro(()=>{g.phase='idle';syncOpp();evalTurn()});
-  },3200);
-}
-
-/* ---------- Züge ---------- */
-function whoseTurn(){const g=S.g;const kd=S.role==='kid'?g.myDone:g.oppDone,pd=S.role==='kid'?g.oppDone:g.myDone;return kd<=pd?'kid':'papa'}
-function evalTurn(){
-  const g=S.g;if(!g||g.ended||S.anim||['start','level','levelwon'].includes(g.phase))return;
-  if(!g.castle[oppSide()]){g.phase='waitcastle';renderCtl();return}
-  if(blockRects(oppSide()).length===0)return levelDone(true);
-  if(blockRects(mySide()).length===0)return levelDone(false);
-  if(whoseTurn()===S.role){if(!['pick','ask','fire','aim'].includes(g.phase))startMyTurn()}
-  else{if(g.phase!=='wait'){g.phase='wait';renderCtl();if(S.role==='kid')say('Jetzt ist Opi dran!')}if(!g.oppReal)scheduleBot()}
-}
-function startMyTurn(){
-  const g=S.g;g.wrongs=0;g.loaded=null;g.aim=null;const p=planOf(g.lvl);
-  if(S.role==='kid'){
-    const tops=blockRects(oppSide()).filter(b=>b.top);
-    let cand=tops.filter(b=>b.color!==g.prevKey);if(!cand.length)cand=tops;
-    const t=rnd(cand);g.prevKey=t.color;
-    const item=itemFromKey(t.color);
-    g.task={target:t.idx,item,ammo:ammoFor(item,p.kidN,g.lvl)};
-    if(g.cfg.stufe===3){g.phase='ask';renderCtl();say(item.c&&!item.s?'Welche Farbe hat der Block?':'Was ist auf dem Block?');setAsk()}
-    else{g.phase='pick';renderCtl();setTimeout(()=>say(`Nimm ${itemTake(item)}!`),200)}
-  }else{
-    const alive=blockRects(oppSide());
-    const item=itemFromKey(rnd(alive).color);
-    const lvl=g.cfg.papaLevel;
-    const n=Math.min(6,(lvl==='leicht'?3:4)+g.lvl);
-    const ammo=ammoFor(item,n,lvl==='schwer'?Math.max(g.lvl,3):g.lvl);
-    if(!ammo.includes(item))ammo[0]=item;
-    const ink=lvl==='schwer'?rnd(COLORS.filter(x=>x!==item.c)).hex:'#111';
-    g.task={item,ammo,ink};g.phase='pick';renderCtl();
-  }
-}
-function pickBall(i,el){
-  const g=S.g;if(!g||!['pick','aim','fire'].includes(g.phase))return;ac();
-  const it=g.task.ammo[i];
-  if(S.role==='kid'){
-    // Jede Kugel darf geladen werden – treffen kann nur die passende
-    g.loaded=it;g.phase='fire';sfx('tick');say(itemName(it)+'! Jetzt: Feuer!');renderCtl();
-  }else{g.loaded=it;g.phase='aim';sfx('tick');renderCtl()}
-}
-/* Thilo: Kugel fliegt automatisch zum Ziel-Block – Treffer nur, wenn sie passt */
-function fireKid(){
-  const g=S.g;if(!g||g.phase!=='fire'||!g.loaded)return;ac();
-  const rects=blockRects(oppSide());
-  let rect=rects.find(b=>b.idx===g.task.target);
-  if(!rect)rect=rects.filter(b=>b.top)[0]||rects[0];
-  if(!rect){g.phase='idle';evalTurn();return}
-  const it=g.loaded,ok=it.key===rect.color,hit=ok?rect.idx:-1;
-  const v=autoVel(mySide(),rect.x+B/2,rect.y+B/2,1.45);
-  const sim=simulate(armEnd(mySide(),FIRED),v.vx,v.vy,[rect]);
-  g.myShots++;
-  pres({shots:g.myShots,last:{n:g.myShots,auto:1,target:rect.idx,vx:v.vx,vy:v.vy,item:it.key,hit},ask:null});
-  g.loaded=null;g.phase='anim';renderCtl();
-  const target=itemFromKey(rect.color);
-  launch(mySide(),sim,it,()=>{
-    resultFx(sim,it,hit,oppSide());g.myDone++;
-    if(ok)say(rnd(['Treffer!','Bumm! Getroffen!','Super Schuss!']));
-    else say('Boing! Das passt nicht. Der Block ist '+(target.c&&!target.s?target.c.name.toLowerCase():'ein '+itemName(target))+'.');
-    afterAnim();
-  });
-}
-function fireManual(vx,vy){
-  const g=S.g;if(!g||g.phase!=='aim'||!g.loaded)return;
-  const sim=simulate(armEnd(mySide(),FIRED),vx,vy,blockRects(oppSide()));
-  const ok=sim.type==='block'&&sim.rect.color===g.loaded.key&&g.loaded.key===g.task.item.key;
-  const hit=ok?sim.rect.idx:-1;
-  g.myShots++;
-  pres({shots:g.myShots,last:{n:g.myShots,auto:0,vx,vy,item:g.loaded.key,hit}});
-  const it=g.loaded;g.loaded=null;g.aim=null;g.phase='anim';renderCtl();
-  launch(mySide(),sim,it,()=>{resultFx(sim,it,hit,oppSide());g.myDone++;afterAnim()});
-}
-function resultFx(sim,it,hit,targetSide){
-  const g=S.g;const p=sim.pts[sim.pts.length-1];
-  if(hit>=0){const r=sim.rect||blockRects(targetSide).find(b=>b.idx===hit);g.dead[targetSide].add(hit);boomFx(r||{x:p[0]-9,y:p[1]-9,w:B,h:B},it)}
-  else if(sim.type==='block'){textFx(p[0],p[1]-14,'BOING!');sfx('boing');bounceFx(p[0],p[1],it)}
-  else if(sim.type==='hill'){textFx(p[0],p[1]-14,'PLOPP!');sfx('plopp');dustFx(p[0],p[1])}
-  else{textFx(Math.max(20,Math.min(W-20,p[0])),Math.min(GROUND-14,p[1]-14),'DANEBEN!');sfx('plopp');dustFx(Math.max(0,Math.min(W,p[0])),Math.min(GROUND,p[1]))}
-}
-function afterAnim(){setTimeout(()=>{S.anim=null;syncOpp();evalTurn()},700)}
-
-/* Gegner-Schüsse (echtes Handy) */
-function syncOpp(){
-  const g=S.g;if(!g||!g.oppReal)return;const o=opp();if(!o||o.presence.gid!==g.gid)return;
-  const os=oppSide();
-  const cs=o.presence.castle;
-  if(!g.castle[os]&&o.presence.clvl===g.lvl&&Array.isArray(cs)&&cs.length===g.n&&cs.every(k=>itemFromKey(k))){g.castle[os]=cs.slice();if(g.phase==='waitcastle')g.phase='idle';evalTurn()}
-  const last=o.presence.last;
-  if(!S.anim&&last&&typeof last.n==='number'&&last.n===g.oppDone+1&&!g.ended&&!['level','levelwon'].includes(g.phase)&&g.castle[os]){
-    const it=itemFromKey(last.item)||mkItem('rot',null);const ms=mySide();
-    const vx=+last.vx||0,vy=+last.vy||0;
-    let sim;
-    if(last.auto){const r=blockRects(ms).find(b=>b.idx===last.target);sim=simulate(armEnd(os,FIRED),vx,vy,r?[r]:[])}
-    else sim=simulate(armEnd(os,FIRED),vx,vy,blockRects(ms));
-    const hit=typeof last.hit==='number'&&last.hit>=0&&last.hit<g.n?last.hit:-1;
-    if(g.phase!=='wait'){g.phase='wait';renderCtl()}
-    launch(os,sim,it,()=>{
-      if(hit>=0&&!(sim.type==='block'&&sim.rect.idx===hit)){sim={pts:sim.pts,type:'block',rect:blockRects(ms).find(b=>b.idx===hit)}}
-      resultFx(sim,it,hit,ms);
-      if(S.role==='kid')say(hit>=0?'Oh! Opi hat getroffen!':'Daneben, Opi!');
-      g.oppDone++;afterAnim();
-    });
-  }
-}
-/* Robo-Gegner */
-function scheduleBot(){const g=S.g;if(g.botT||S.anim)return;g.botT=setTimeout(()=>{g.botT=null;botShoot()},1700)}
-function botShoot(){
-  const g=S.g;if(!g||g.ended||S.anim||whoseTurn()===S.role||['level','levelwon'].includes(g.phase))return;
-  const os=oppSide(),ms=mySide(),targets=blockRects(ms);if(!targets.length)return;
-  const acc=S.role==='kid'?({selten:.35,manchmal:.55,oft:.75}[g.cfg.bot]||.55):1;
-  let sim,hit=-1;
-  if(Math.random()<acc){
-    const tops=targets.filter(b=>b.top);const t=rnd(tops.length?tops:targets);const it=itemFromKey(t.color);
-    const v=autoVel(os,t.x+B/2,t.y+B/2,1.45);sim=simulate(armEnd(os,FIRED),v.vx,v.vy,[t]);hit=t.idx;
-    launch(os,sim,it,()=>{resultFx(sim,it,hit,ms);if(S.role==='kid')say('Oh! Robo hat getroffen!');g.oppDone++;afterAnim()});
-  }else{
-    const it=itemFromKey(rnd(targets).color);
-    const v=autoVel(os,HX+(Math.random()*30-15),hillY(HX)-2,1.1);sim=simulate(armEnd(os,FIRED),v.vx,v.vy,[]);
-    launch(os,sim,it,()=>{resultFx(sim,it,-1,ms);if(S.role==='kid')say('Daneben, Robo!');g.oppDone++;afterAnim()});
-  }
-  g.phase='wait';renderCtl();
-}
-/* Stufe 3: Benennen – Opi bestätigt */
-function setAsk(){const g=S.g;g.askN++;g.askId='a'+g.askN+'-'+g.myShots;
-  if(opp())pres({ask:{id:g.askId,item:g.task.item.key}})}
-function checkOk(){
-  const g=S.g;if(!g||S.role!=='kid'||g.phase!=='ask'||!g.askId)return;
-  const o=opp();const ok=o&&o.presence.ok;
-  if(ok&&ok.id===g.askId){g.askId=null;
-    if(ok.good)askSuccess();
-    else{sfx('no');say('Hör mal: '+itemName(g.task.item)+'. Sag es nochmal!');setAsk()}}
-}
-function askSuccess(){const g=S.g;g.loaded=g.task.item;g.phase='fire';sfx('ok');pres({ask:null});say(rnd(PRAISE)+' '+itemName(g.task.item)+'! Jetzt: Feuer!');renderCtl()}
-function checkAsk(){
-  if(S.role!=='papa'||!S.g)return;
-  const o=opp();const a=o&&o.presence.ask;const L=$('#layer');
-  if(a&&typeof a.id==='string'&&!S.answered.has(a.id)&&o.presence.gid===S.g.gid){
-    if(L.dataset.ask===a.id)return;
-    const it=itemFromKey(a.item);if(!it)return;L.dataset.ask=a.id;
-    L.innerHTML=`<div class="overlay"><div class="panel center">
-      <h2 class="bang" style="font-size:30px">🗣️ Thilo sagt …</h2>
-      <div style="width:100px;margin:8px auto">${itemSVG(it)}</div>
-      <div class="muted">Richtig wäre:</div><div class="bang" style="font-size:40px;color:var(--red);-webkit-text-stroke:1px #111">${escapeHtml(itemName(it))}</div>
-      <div class="row" style="margin-top:12px"><button class="btn green grow" data-act="askok">👍 Richtig!</button><button class="btn grow" data-act="askno">🔁 Nochmal</button></div>
-      <div class="muted" style="margin-top:8px">Auch Gebärde oder Annäherung zählt – du entscheidest.</div></div></div>`;
-  }else if(L.dataset.ask&&(!a||a.id!==L.dataset.ask)){closeLayer()}
-}
-function answerAsk(good){const L=$('#layer');const id=L.dataset.ask;if(!id)return;S.answered.add(id);pres({ok:{id,good}});closeLayer()}
-function endGame(){
-  const g=S.g;g.ended=true;g.phase='end';if(g.botT)clearTimeout(g.botT);
-  sfx('win');renderCtl();
-  const iWon=g.stars.me>g.stars.opp,tie=g.stars.me===g.stars.opp;
-  if(S.role==='kid')say(tie?'Unentschieden! Ihr seid beide super!':iWon?'Juhu! Du hast die meisten Sterne! Du hast gewonnen!':'Opi hat gewonnen. Du warst super! Noch einmal?');
-}
-
-/* ---------- Animation & Zeichnen ---------- */
-function launch(side,sim,color,done){
-  const g=S.g;g.arm[side]=FIRED;g.armT[side]=performance.now();sfx('launch');
-  S.anim={pts:sim.pts,i:0,color,done,t0:performance.now()};
-}
-function boomFx(r,color){sfx('boom');const cx=r.x+r.w/2,cy=r.y+r.h/2;textFx(cx,cy-16,rnd(['POW!','BÄM!','ZACK!','KRACH!']));
-  for(let i=0;i<16;i++){const a=Math.random()*Math.PI*2,s=40+Math.random()*90;S.g.fx.push({k:'p',x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s-60,c:itemHex(color),t0:performance.now(),life:900,sz:3+Math.random()*3})}}
-function bounceFx(x,y,color){for(let i=0;i<5;i++)S.g.fx.push({k:'p',x,y,vx:(Math.random()-.5)*60,vy:-40-Math.random()*40,c:itemHex(color),t0:performance.now(),life:600,sz:3})}
-function dustFx(x,y){for(let i=0;i<10;i++)S.g.fx.push({k:'p',x,y,vx:(Math.random()-.5)*80,vy:-20-Math.random()*50,c:'#c9a26b',t0:performance.now(),life:700,sz:3+Math.random()*2})}
-function textFx(x,y,txt){S.g.fx.push({k:'t',x,y,txt,t0:performance.now(),life:1100})}
-
-let cv=null,ctx=null,scale=1;
-function setupCanvas(){
-  cv=$('#cv');if(!cv)return;ctx=cv.getContext('2d');
-  const w=cv.clientWidth||300,dpr=Math.min(window.devicePixelRatio||1,3);
-  cv.style.height=(w*H/W)+'px';cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);scale=cv.width/W;
-  cv.onpointerdown=onDown;cv.onpointermove=onMove;cv.onpointerup=onUp;cv.onpointercancel=()=>{if(S.g)S.g.drag=null};
-}
-window.addEventListener('resize',()=>{if(S.screen==='game')setupCanvas()});
-const mirror=()=>S.role==='papa';
-function worldPt(e){const r=cv.getBoundingClientRect();let x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;if(mirror())x=W-x;return {x,y}}
-function onDown(e){const g=S.g;if(!g||g.phase!=='aim')return;cv.setPointerCapture(e.pointerId);const p=worldPt(e);g.drag={sx:p.x,sy:p.y};g.aim={vx:0,vy:0};e.preventDefault()}
-function onMove(e){const g=S.g;if(!g||!g.drag)return;const p=worldPt(e);let vx=(g.drag.sx-p.x)*3.2,vy=(g.drag.sy-p.y)*3.2;const m=Math.hypot(vx,vy),MAX=290;if(m>MAX){vx*=MAX/m;vy*=MAX/m}g.aim={vx,vy}}
-function onUp(){const g=S.g;if(!g||!g.drag)return;g.drag=null;const a=g.aim;if(a&&Math.hypot(a.vx,a.vy)>45)fireManual(a.vx,a.vy);else g.aim=null}
-
-function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
-function shapePath(id,x,y,r){ctx.beginPath();
-  if(id==='kreis')ctx.arc(x,y,r,0,Math.PI*2);
-  else if(id==='quadrat'){ctx.rect(x-r*.85,y-r*.85,r*1.7,r*1.7)}
-  else if(id==='dreieck'){ctx.moveTo(x,y-r);ctx.lineTo(x+r*1.05,y+r*.8);ctx.lineTo(x-r*1.05,y+r*.8);ctx.closePath()}
-  else if(id==='stern'){starPts(x,y+r*.08,r*1.15,r*.5).forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath()}
-  else if(id==='herz'){ctx.moveTo(x,y+r*.9);ctx.bezierCurveTo(x-r*1.3,y,x-r*1.1,y-r*1.1,x,y-r*.4);ctx.bezierCurveTo(x+r*1.1,y-r*1.1,x+r*1.3,y,x,y+r*.9);ctx.closePath()}
-}
-function drawProj(x,y,it,r){r=r||BR;if(!it.s)return drawBall(x,y,itemHex(it),r);
-  shapePath(it.s.id,x,y,r);ctx.fillStyle=itemHex(it);ctx.fill();ctx.lineWidth=1.8;ctx.strokeStyle='#111';ctx.lineJoin='round';ctx.stroke()}
-function drawBall(x,y,hex,r){ctx.beginPath();ctx.arc(x,y,r||BR,0,Math.PI*2);ctx.fillStyle=hex;ctx.fill();ctx.lineWidth=1.8;ctx.strokeStyle='#111';ctx.stroke();
-  ctx.beginPath();ctx.ellipse(x-(r||BR)*.35,y-(r||BR)*.4,(r||BR)*.32,(r||BR)*.2,-.5,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.75)';ctx.fill()}
-function drawCatapult(side,now){
-  const g=S.g,p=pivot(side);
-  // Arm federt zurück
-  const t=(now-g.armT[side])/1000;let ang=g.arm[side];
-  if(ang!==REST&&t>0.35){const k=Math.min(1,(t-.35)/.8);ang=FIRED+(REST-FIRED)*k;if(k>=1)g.arm[side]=REST}
-  ctx.save();ctx.translate(p.x,p.y);if(side==='papa')ctx.scale(-1,1);
-  ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle='#111';
-  // Gestell
-  ctx.fillStyle='#a0612d';ctx.lineWidth=2;rr(-16,6,30,7,2);ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.moveTo(-8,7);ctx.lineTo(0,0);ctx.lineTo(8,7);ctx.closePath();ctx.fillStyle='#7a4219';ctx.fill();ctx.stroke();
-  [[-10,14],[9,14]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);ctx.fillStyle='#5a3a1a';ctx.fill();ctx.stroke();ctx.beginPath();ctx.arc(x,y,1.3,0,Math.PI*2);ctx.fillStyle='#111';ctx.fill()});
-  // Arm
-  const a=ang*Math.PI/180,ex=24*Math.cos(a),ey=24*Math.sin(a);
-  ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(ex,ey);ctx.stroke();
-  ctx.lineWidth=3.5;ctx.strokeStyle='#c27a3a';ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(ex,ey);ctx.stroke();ctx.strokeStyle='#111';
-  ctx.beginPath();ctx.arc(ex,ey,5.5,0,Math.PI);ctx.lineWidth=2.4;ctx.fillStyle='#7a4219';ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.arc(0,0,2.5,0,Math.PI*2);ctx.fillStyle='#111';ctx.fill();
-  ctx.restore();
-  // geladene Kugel
-  if(side===mySide()&&g.loaded&&!S.anim){const e=armEnd(side,ang);drawProj(e.x,e.y-4,g.loaded,5.5)}
-}
-function drawBlock(b,hl,now){
-  const it=itemFromKey(b.color)||mkItem('rot',null);
-  ctx.lineWidth=2;ctx.strokeStyle='#111';rr(b.x+.5,b.y+.5,b.w-1,b.h-1,3);ctx.fillStyle=itemHex(it);ctx.fill();ctx.stroke();
-  if(!it.c){ctx.strokeStyle='rgba(0,0,0,.18)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(b.x+3,b.y+6);ctx.lineTo(b.x+8,b.y+4);ctx.moveTo(b.x+12,b.y+14);ctx.lineTo(b.x+15,b.y+11);ctx.stroke();ctx.strokeStyle='#111'}
-  ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillRect(b.x+3,b.y+3,b.w-9,2.5);
-  if(it.s){shapePath(it.s.id,b.x+b.w/2,b.y+b.h/2+.5,5.6);ctx.fillStyle=it.c?'#fff':'#111';ctx.fill();ctx.lineWidth=1.3;ctx.strokeStyle='#111';ctx.stroke()}
-  else{ctx.fillStyle='#111';ctx.beginPath();ctx.ellipse(b.x+6.5,b.y+9,1.4,1.9,0,0,Math.PI*2);ctx.ellipse(b.x+11.5,b.y+9,1.4,1.9,0,0,Math.PI*2);ctx.fill();
-    ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(b.x+9,b.y+11.5,2.2,.2*Math.PI,.8*Math.PI);ctx.stroke()}
-  if(hl){const s=Math.sin(now/180);ctx.lineWidth=2.5;ctx.strokeStyle='#fff';rr(b.x-2-s,b.y-2-s,b.w+4+2*s,b.h+4+2*s,4);ctx.stroke();ctx.strokeStyle='#111';ctx.lineWidth=1.2;ctx.stroke();
-    const ay=b.y-12+Math.abs(s)*-4;ctx.beginPath();ctx.moveTo(b.x+9,ay+8);ctx.lineTo(b.x+3,ay);ctx.lineTo(b.x+6.5,ay);ctx.lineTo(b.x+6.5,ay-7);ctx.lineTo(b.x+11.5,ay-7);ctx.lineTo(b.x+11.5,ay);ctx.lineTo(b.x+15,ay);ctx.closePath();
-    ctx.fillStyle='#fff';ctx.fill();ctx.lineWidth=1.6;ctx.stroke()}
-}
-function drawHero(side,blocks){
-  const im=HERO_IMG[side];if(!im.complete)return;
-  const col0=blocks.filter(b=>b.col===0);const topY=col0.length?Math.min(...col0.map(b=>b.y)):GROUND;
-  const cx=side==='kid'?6+B/2:W-6-B/2;const w=22,h=w*58/50;
-  ctx.save();ctx.translate(cx,topY);if(side==='papa')ctx.scale(-1,1);ctx.drawImage(im,-w*0.56,-h,w,h);ctx.restore();
-}
-function draw(now){
-  requestAnimationFrame(draw);
-  const g=S.g;if(!g||!ctx||S.screen!=='game')return;
-  ctx.setTransform(scale,0,0,scale,0,0);
-  // Himmel
-  const sky=ctx.createLinearGradient(0,0,0,GROUND);sky.addColorStop(0,'#7fd0ff');sky.addColorStop(1,'#d8f3ff');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#FFD21F';ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.beginPath();ctx.arc(W/2+60,28,13,0,Math.PI*2);ctx.fill();ctx.stroke();
-  [[50,30],[230,48],[150,20]].forEach(([x,y],i)=>{const dx=((now/90+i*70)%(W+80))-40;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x+dx*0.15,y,8,0,7);ctx.arc(x+dx*0.15+9,y-4,10,0,7);ctx.arc(x+dx*0.15+19,y,8,0,7);ctx.fill()});
-  if(mirror())ctx.transform(-1,0,0,1,W,0);
-  // Boden & Hügel
-  ctx.fillStyle='#5cc35c';ctx.fillRect(0,GROUND,W,H-GROUND);ctx.strokeStyle='#111';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(0,GROUND);ctx.lineTo(W,GROUND);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(HX-HW,GROUND);for(let x=HX-HW;x<=HX+HW;x+=2)ctx.lineTo(x,hillY(x));ctx.lineTo(HX+HW,GROUND);ctx.closePath();ctx.fillStyle='#4fb04f';ctx.fill();ctx.stroke();
-  ctx.fillStyle='#3e963e';[[HX-20,GROUND-14],[HX+12,GROUND-22],[HX+28,GROUND-8]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,2.2,0,7);ctx.fill()});
-  // Blume auf dem Hügel
-  const fy=hillY(HX);ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(HX,fy);ctx.lineTo(HX,fy-9);ctx.stroke();
-  ['#ff8fa3','#ff8fa3','#ff8fa3','#ff8fa3','#ff8fa3'].forEach((c,i)=>{const a=i/5*Math.PI*2;ctx.beginPath();ctx.arc(HX+Math.cos(a)*3.2,fy-11+Math.sin(a)*3.2,2.4,0,7);ctx.fillStyle=c;ctx.fill();ctx.lineWidth=1;ctx.stroke()});
-  ctx.beginPath();ctx.arc(HX,fy-11,1.8,0,7);ctx.fillStyle='#FFD21F';ctx.fill();ctx.stroke();
-  // Burgen
-  const hlIdx=(S.role==='kid'&&g.task&&g.cfg.stufe!==2&&['pick','ask','fire'].includes(g.phase))?g.task.target:-1;
-  ['kid','papa'].forEach(side=>{
-    const bl=blockRects(side);
-    bl.forEach(b=>drawBlock(b,side===oppSide()&&b.idx===hlIdx,now));
-    if(!g.castle[side]){ctx.fillStyle='rgba(0,0,0,.25)';ctx.font='10px sans-serif'}
-    drawHero(side,bl);drawCatapult(side,now);
-  });
-  // Zielhilfe für Opi
-  if(g.phase==='aim'&&g.aim&&g.drag){
-    const dots={leicht:40,mittel:14,schwer:5}[g.cfg.papaLevel]||14;
-    const L=armEnd(mySide(),FIRED);let x=L.x,y=L.y,vx=g.aim.vx,vy=g.aim.vy;const dt=1/30;
-    ctx.fillStyle='#fff';ctx.strokeStyle='#111';ctx.lineWidth=1;
-    for(let i=0;i<dots;i++){vy+=GR*dt;x+=vx*dt;y+=vy*dt;if(y>GROUND)break;ctx.beginPath();ctx.arc(x,y,1.8,0,7);ctx.fill();ctx.stroke()}
-    const p=pivot(mySide());ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(L.x,L.y);ctx.lineTo(L.x-g.aim.vx*.12,L.y-g.aim.vy*.12);ctx.stroke();ctx.setLineDash([]);
-  }
-  // Flug
-  const A=S.anim;
-  if(A){const i=Math.max(0,Math.min(A.pts.length-1,Math.floor((now-A.t0)/1000*60)));
-    for(let k=Math.max(0,i-8);k<i;k+=2){ctx.globalAlpha=.25+(k-(i-8))/12;drawBall(A.pts[k][0],A.pts[k][1],itemHex(A.color),2.2)}ctx.globalAlpha=1;
-    drawProj(A.pts[i][0],A.pts[i][1],A.color,6.5);
-    if(i>=A.pts.length-1&&!A.fired){A.fired=true;const d=A.done;d&&d()}}
-  // Partikel
-  g.fx=g.fx.filter(f=>now-f.t0<f.life);
-  g.fx.forEach(f=>{if(f.k!=='p')return;const t=(now-f.t0)/1000;ctx.globalAlpha=1-(now-f.t0)/f.life;ctx.fillStyle=f.c;ctx.strokeStyle='#111';ctx.lineWidth=1;
-    ctx.beginPath();ctx.rect(f.x+f.vx*t-f.sz/2,f.y+f.vy*t+150*t*t-f.sz/2,f.sz,f.sz);ctx.fill();ctx.stroke()});ctx.globalAlpha=1;
-  // Comic-Texte (nicht gespiegelt)
-  ctx.setTransform(scale,0,0,scale,0,0);
-  g.fx.forEach(f=>{if(f.k!=='t')return;const k=(now-f.t0)/f.life;const x=mirror()?W-f.x:f.x;const sc=k<.2?k/.2*1.2:1.2-.2*Math.min(1,(k-.2)/.3);
-    ctx.save();ctx.translate(Math.max(30,Math.min(W-30,x)),Math.max(18,f.y));ctx.rotate(-.12);ctx.scale(sc,sc);ctx.globalAlpha=k>.75?1-(k-.75)/.25:1;
-    // Stern-Explosion
-    ctx.beginPath();for(let j=0;j<16;j++){const r=j%2?11:20,a=j/16*Math.PI*2;ctx.lineTo(Math.cos(a)*r*1.5,Math.sin(a)*r)}ctx.closePath();ctx.fillStyle='#FFD21F';ctx.fill();ctx.lineWidth=1.8;ctx.strokeStyle='#111';ctx.stroke();
-    ctx.font='16px Bangers, Impact, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=3;ctx.strokeText(f.txt,0,1);ctx.fillStyle='#E8312F';ctx.fillText(f.txt,0,1);ctx.restore()});
-}
-requestAnimationFrame(draw);
-
-/* ---------- Oberfläche ---------- */
-function render(){
-  const A=$('#app');
-  if(S.screen==='role'||!S.role){S.screen='role';A.innerHTML=roleHTML();return}
-  if(S.screen==='lobby'){A.innerHTML=lobbyHTML();renderLobbyStatus();return}
-  if(S.screen==='game'){
-    A.innerHTML=`<div class="topbar"><span class="bang">🏰 Katapult-Duell</span><button class="btn small" data-act="quit">✖ Ende</button></div>
-      <div class="panel field"><canvas id="cv"></canvas><div class="score" id="score"></div></div><div id="ctl"></div>`;
-    setupCanvas();renderCtl();
-  }
-}
-function roleHTML(){
-  return `<div class="center"><h1 class="title">KATAPULT-DUELL!</h1><div style="margin-top:10px"><span class="subtitle">Farb-Kugeln: Thilo gegen Opi</span></div></div>
-  <div class="panel"><h2 class="bang center" style="font-size:30px;margin-bottom:10px">Wer spielt auf diesem Handy?</h2>
-   <div class="roles">
-    <div class="rolecard kid" data-act="role" data-v="kid">${heroSVG('kid')}<div class="bang">Ich bin Thilo</div></div>
-    <div class="rolecard papa" data-act="role" data-v="papa">${heroSVG('papa')}<div class="bang">Ich bin Opi</div></div>
-   </div></div>
-  <div class="panel muted">So geht's: Jeder hat eine Burg aus bunten Blöcken. Ein Block fliegt nur weg, wenn die Kugel <b>passt</b> – erst die Farbe, später die Form, am Ende beides. Für jede abgeräumte Burg gibt es einen Stern; von Level zu Level wird es schwerer. Beide Handys öffnen diese Seite – eins wählt „Thilo“, das andere „Opi“. Sie finden sich von selbst.</div>`;
-}
-function lobbyHTML(){
-  const isPapa=S.role==='papa';
-  return `<div class="topbar"><button class="btn small" data-act="back">◀</button><span class="bang" style="font-size:30px">${isPapa?'Opi':'Thilo'}</span>
-     <button class="btn small" data-act="sound">${S.local.sound?'🔊':'🔇'}</button></div>
-   <div class="panel center"><div style="width:130px;margin:0 auto">${heroSVG(S.role)}</div><div class="status" id="lstatus"></div></div>
-   ${isPapa?settingsHTML():''}
-   <button class="btn go" data-act="start">LOS!</button>
-   ${!isPapa?`<div class="center"><button class="btn small" data-act="kidset">⚙ Einstellungen (für Erwachsene)</button></div>`:''}`;
-}
-function renderLobbyStatus(){
-  const el=$('#lstatus');if(!el)return;
-  const o=opp(),who=S.role==='kid'?'Opi':'Thilo';
-  let h;
-  if(o)h=`<span class="pill ok">✔ ${who} ist da!</span>${S.role==='kid'?'<span class="pill">Opi stellt das Spiel ein</span>':''}`;
-  else if(NET.state==='nolib')h='<span class="pill noconn">Spiel nicht ganz geladen – Internet prüfen und Seite neu laden</span>';
-  else if(NET.state==='nohttps')h='<span class="pill noconn">Bitte über die https://-Adresse von GitHub Pages öffnen</span>';
-  else if(NET.state==='neterr')h='<span class="pill noconn">Keine Verbindung zum Spielserver – ich versuche es weiter …</span>';
-  else if(NET.state==='ok')h=`<span class="pill">⏳ Warte auf ${who} …</span>`;
-  else h='<span class="pill">Verbinde …</span>';
-  if(!o)h+=`<div class="muted" style="margin-top:8px">Auf dem anderen Handy dieses Spiel öffnen und „${who}“ wählen. Oder einfach LOS – dann spielt der Robo mit.</div>`;
-  el.innerHTML=h;
-}
-function seg(name,opts,cur){return `<div class="seg">${opts.map(([v,l])=>`<button class="${String(cur)===String(v)?'on':''}" data-act="cfg" data-k="${name}" data-v="${v}">${l}</button>`).join('')}</div>`}
-function settingsHTML(){
-  const c=S.cfg;
-  return `<details class="panel" ${store('openset')===false?'':'open'} id="setbox"><summary>⚙ Einstellungen</summary>
-   <div class="set"><label class="lbl">Lernstufe Thilo</label>${seg('stufe',[[1,'1 · Zuordnen'],[2,'2 · Hören &amp; Wählen'],[3,'3 · Benennen']],c.stufe)}
-     <div class="muted" style="margin-top:4px">${['','Der Ziel-Block wird gezeigt – Thilo nimmt das Passende.','Es wird nur gesagt – Thilo wählt das Passende.','Thilo sagt laut, was auf dem Ziel-Block ist, Opi bestätigt auf seinem Handy.'][c.stufe]}</div></div>
-   <div class="set"><label class="lbl">Anzahl Level</label>${seg('levels',[[3,'3'],[4,'4'],[5,'5']],c.levels)}
-     <div class="muted" style="margin-top:4px">${LEVEL_PLAN.slice(0,c.levels).map((p,i)=>`Level ${i+1}: ${p.label} – Thilo hat ${p.kidN} zur Auswahl`).join('<br>')}<br>Opi: jedes Level eine Kugel mehr. Pro abgeräumter Burg gibt es einen Stern.</div></div>
-   <div class="set"><label class="lbl">Opi-Schwierigkeit (Opi zielt selbst)</label>${seg('papaLevel',[['leicht','Leicht (lange Zielhilfe)'],['mittel','Mittel (kurze Zielhilfe)'],['schwer','Schwer (Wort in falscher Farbe)']],c.papaLevel)}</div>
-   <div class="set"><label class="lbl">Blöcke pro Burg</label>${seg('blocks',[[4,'4'],[6,'6'],[9,'9']],c.blocks)}</div>
-   <div class="set"><label class="lbl">Robo-Gegner trifft (wenn niemand verbunden ist)</label>${seg('bot',[['selten','Selten'],['manchmal','Manchmal'],['oft','Oft']],c.bot)}</div>
-  </details>`;
-}
-function setCfg(k,v){const c=S.cfg;if(['stufe','levels','blocks'].includes(k))c[k]=+v;else c[k]=v;saveCfg()}
-function toggleColor(v){const l=S.cfg.colors;const i=l.indexOf(v);if(i>=0){if(l.length>2)l.splice(i,1)}else l.push(v);saveCfg()}
-function saveCfg(){store('cfg',S.cfg);if(S.role==='papa')pres({cfg:S.cfg});const sy=window.scrollY;if(S.screen==='lobby'){render();window.scrollTo(0,sy)}if($('#kidset'))openKidSettings()}
-function openKidSettings(){$('#layer').innerHTML=`<div class="overlay" id="kidset" style="align-items:flex-start;overflow:auto"><div style="max-width:520px;width:100%">${settingsHTML().replace('<details','<div').replace('</details>','</div>').replace(/<summary>.*?<\/summary>/,'<h2 class="bang" style="font-size:26px">⚙ Einstellungen</h2><div class="muted">Wenn Opi verbunden ist, gelten seine Einstellungen.</div>')}<button class="btn go" style="margin-top:12px;font-size:30px" data-act="closeset">Fertig</button></div></div>`}
-
-function renderScore(){
-  const g=S.g,el=$('#score');if(!el||!g)return;
-  const cnt=s=>g.castle[s]?blockRects(s).length:'…';
-  const lname=S.role==='kid'?'Thilo':'Opi',rname=S.role==='kid'?(g.oppReal?'Opi':'Robo'):(g.oppReal?'Thilo':'Robo');
-  el.innerHTML=`<span>${lname} ⭐${g.stars.me}</span><span>Level ${g.lvl+1}/${g.LV}</span><span>⭐${g.stars.opp} ${rname}</span>`;
-}
-function ballBtns(ammo,small,selected){return `<div class="ammo ${small?'small':''}">${ammo.map((it,i)=>it.s?`<div class="ball shp ${selected===it?'sel':''}" data-act="ball" data-i="${i}" role="button" aria-label="Auswahl ${i+1}">${itemSVG(it)}</div>`:`<div class="ball ${selected===it?'sel':''}" style="background:${it.c.hex}" data-act="ball" data-i="${i}" role="button" aria-label="Kugel ${i+1}"></div>`).join('')}</div>`}
-function renderCtl(){
-  const g=S.g,el=$('#ctl');renderScore();if(!el||!g)return;
-  const oname=S.role==='kid'?(g.oppReal?'Opi':'Robo'):(g.oppReal?'Thilo':'Robo');
-  const P=h=>`<div class="panel">${h}</div>`;
-  switch(g.phase){
-    case 'start':case 'idle':el.innerHTML='';break;
-    case 'waitcastle':el.innerHTML=P(`<div class="hint">Warte auf ${oname}s Burg …</div>`);break;
-    case 'wait':el.innerHTML=P(`<div class="wait">${heroSVG(oppSide())}<div class="bang">${escapeHtml(oname)} ist dran …</div></div>`+(g.oppReal&&!opp()?`<div class="hint" style="margin-top:6px">📡 Verbindung zu ${escapeHtml(oname)} weg – warte …</div>`:''));break;
-    case 'anim':el.innerHTML=P(`<div class="wait"><div class="bang">🚀 Fliiieg!</div></div>`);break;
-    case 'pick':
-      if(S.role==='kid'){const it=g.task.item;
-        const bub=g.cfg.stufe===2?`<div class="bubble big">Hör gut zu! <button class="speak" data-act="speak">🔊</button></div>`
-          :`<div class="bubble">${escapeHtml(itemName(it))}! <button class="speak" data-act="speak">🔊</button></div>`;
-        el.innerHTML=P(bub+`<div class="hint">Welche Kugel nimmst du?</div>`+ballBtns(g.task.ammo,false));
-      }else el.innerHTML=P(opiBubble()+`<div class="hint">Wähle eine Kugel:</div>`+ballBtns(g.task.ammo,true));
-      break;
-    case 'aim':el.innerHTML=P(opiBubble()+`<div class="hint">👆 Auf dem Spielfeld nach hinten ziehen und loslassen!</div>`+ballBtns(g.task.ammo,true,g.loaded));break;
-    case 'ask':{const here=!!opp();
-      el.innerHTML=P(`<div class="bubble">${g.task.item.c&&!g.task.item.s?'Welche Farbe hat der Block?':'Was ist auf dem Block?'}</div>`+(here
-        ?`<div class="bang center" style="font-size:28px">Sag es laut! 👂 Opi hört zu.</div><div class="center" style="margin-top:8px"><button class="btn" data-act="tip">🔊 Tipp hören</button></div>`
-        :`<div class="hint">Thilo sagt die Farbe (oder gebärdet sie). Ein Erwachsener bestätigt:</div><div class="row" style="margin-top:8px"><button class="btn green grow" data-act="solook">👍 Richtig!</button><button class="btn" data-act="tip">🔊 Lösung</button></div>`));break}
-    case 'fire':{const it=g.task.item;
-      const bub=g.cfg.stufe===2?`<div class="bubble big">Hör gut zu! <button class="speak" data-act="speak">🔊</button></div>`
-        :g.cfg.stufe===3?`<div class="bubble">Super! Jetzt: Feuer!</div>`
-        :`<div class="bubble">${escapeHtml(itemName(it))}! <button class="speak" data-act="speak">🔊</button></div>`;
-      el.innerHTML=P(bub+(g.cfg.stufe===3?'':ballBtns(g.task.ammo,false,g.loaded))+`<button class="btn fire" style="margin-top:12px" data-act="fire">FEUER!</button>`);break}
-    case 'level':{const p=planOf(g.lvl);
-      el.innerHTML=P(`<div class="center"><h1 class="title" style="font-size:54px">LEVEL ${g.lvl+1}</h1><div class="bang muted" style="font-size:20px">von ${g.LV}</div>
-        <div class="row" style="justify-content:center;margin:10px 0;flex-wrap:wrap">${levelPool(g.lvl).slice(0,8).map(it=>`<div style="width:40px">${itemSVG(it)}</div>`).join('')}</div>
-        <div class="bang" style="font-size:28px">Jetzt: ${escapeHtml(p.label)}</div></div>`);break}
-    case 'levelwon':{const me=S.role==='kid'?'Thilo':'Opi';
-      el.innerHTML=P(`<div class="center"><h1 class="title" style="font-size:44px">BURG GEFALLEN!</h1>
-        <div class="bang" style="font-size:28px;margin-top:8px">⭐ für ${escapeHtml(g.lastWin?me:oname)}</div>
-        <div class="bang" style="font-size:24px;margin-top:6px">${escapeHtml(me)} ${g.stars.me} : ${g.stars.opp} ${escapeHtml(oname)}</div></div>`);break}
-    case 'end':{
-      const me=S.role==='kid'?'Thilo':'Opi',tie=g.stars.me===g.stars.opp,iWon=g.stars.me>g.stars.opp;
-      el.innerHTML=P(`<h1 class="title center" style="font-size:44px">${tie?'UNENTSCHIEDEN!':iWon?'GEWONNEN!':'SUPER GESPIELT!'}</h1>
-        <div class="trophies" style="margin-top:10px">
-          <div>${trophySVG(tie||iWon,tie||iWon?'1':'★')}<div class="bang">${escapeHtml(me)}</div><div class="bang">⭐ ${g.stars.me}</div></div>
-          <div>${trophySVG(tie||!iWon,tie||!iWon?'1':'★')}<div class="bang">${escapeHtml(oname)}</div><div class="bang">⭐ ${g.stars.opp}</div></div>
-        </div>`)+`<div class="row"><button class="btn go grow" style="font-size:34px" data-act="again">NOCHMAL!</button><button class="btn" data-act="quit">Menü</button></div>`;
-      break}
-  }
-}
-function opiBubble(){const g=S.g,it=g.task.item,lvl=g.cfg.papaLevel;
-  return `<div class="bubble" style="color:${g.task.ink}">Triff: ${lvl==='leicht'?`<span style="display:inline-block;width:40px;height:40px">${itemSVG(it)}</span>`:''}${escapeHtml(itemName(it).toUpperCase())}</div>`}
-function quit(){hush();const g=S.g;if(g&&g.botT)clearTimeout(g.botT);S.g=null;S.anim=null;pres({gid:null,ask:null});closeLayer();S.screen='lobby';render()}
-
-/* ---------- Ereignisse ---------- */
-document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-act]');if(!t)return;ac();
-  const a=t.dataset.act,v=t.dataset.v;
-  switch(a){
-    case 'role':S.role=v;store('role',v);S.screen='lobby';render();startNet();break;
-    case 'back':destroyPeer();S.screen='role';render();break;
-
-    case 'sound':S.local.sound=!S.local.sound;store('local',S.local);render();break;
-    case 'start':case 'again':requestStart();break;
-    case 'cfg':setCfg(t.dataset.k,v);break;
-    case 'tog':toggleColor(v);break;
-    case 'kidset':openKidSettings();break;
-    case 'closeset':closeLayer();break;
-    case 'ball':pickBall(+t.dataset.i,t);break;
-    case 'fire':fireKid();break;
-    case 'speak':if(S.g&&S.g.task)say(`Nimm ${itemTake(S.g.task.item)}!`);break;
-    case 'tip':if(S.g&&S.g.task)say(itemName(S.g.task.item)+'!');break;
-    case 'solook':if(S.g&&S.g.phase==='ask')askSuccess();break;
-    case 'askok':answerAsk(true);break;
-    case 'askno':answerAsk(false);break;
-    case 'quit':quit();break;
-  }
-});
-document.addEventListener('toggle',e=>{if(e.target.id==='setbox')store('openset',e.target.open)},true);
-
-S.screen=S.role?'lobby':'role';
-render();
-if(S.role)startNet();
 </script>
 </body>
 </html>
